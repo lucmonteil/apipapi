@@ -12,30 +12,38 @@ class MessagesController < ApplicationController
   end
 
   def create
+    @sender = true
     # on verifie si c'est un vrai sms ou pas avec les l'existence de params["Body"]
     # l'interface web permet aussi de générer des fakes réponses
     if params["Body"]
       @message_body = params["Body"]
-      @sender = true
-      @user = User.find_by_phone_number(params["From"])
+      @phone = params["From"]
     else
       @message_body = params[:message][:body]
-      @sender = params[:message][:sender]
-      @user = User.find_by_phone_number(params[:message][:user])
+      @sender = params[:message][:sender] ==  "0" ? false : true
+      @phone = params[:message][:user]
     end
-    create_message(@sender)
+    unless @user = User.find_by_phone_number(@phone)
+      @user = User.new
+      @user.email = "#{@phone}@apipapi.com"
+      @user.password = Random.new_seed
+      @user.phone_number = @phone
+      @user.save
+    end
+    create_message
     redirect_to user_path(@user)
   end
 
   def reply
+    @sender = false
     boot_twilio
     @message_body = "Hello world!"
     sms = @client.messages.create(
       from: ENV['TWILIO_NUMBER'],
-      to: @user.phone_number,
+      to: @phone,
       body: body
     )
-    create_message(false)
+    create_message
   end
 
   private
