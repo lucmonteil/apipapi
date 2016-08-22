@@ -17,6 +17,7 @@ gem 'font-awesome-sass'
 gem 'simple_form'
 gem 'autoprefixer-rails'
 
+#Twilio
 gem 'twilio-ruby'
 
 group :development, :test do
