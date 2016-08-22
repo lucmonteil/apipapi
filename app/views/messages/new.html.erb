@@ -1,0 +1,9 @@
+<div class="container">
+  <div class="padded">
+    <%= simple_form_for @message do |f| %>
+      <%= f.input :body %>
+      <%= f.input :user, label: "Phone number" %>
+      <%= f.button :submit %>
+    <% end %>
+  </div>
+</div>
