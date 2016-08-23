@@ -13,6 +13,7 @@ class MessagesController < ApplicationController
   end
 
   def create
+
     # on verifie si c'est un vrai sms ou pas avec les l'existence de params["Body"]
     if params["Body"]
       @message_body = params["Body"]
@@ -24,8 +25,13 @@ class MessagesController < ApplicationController
     end
 
     # parsing
-    @parsing = MessageParser.new(@message_body).parse_for_address
-    @sender = true
+    if @start_address && @end_address
+      @parsing = MessageParser.new(@message_body).parse_for_address
+      @sender = true
+    else
+      @parsing = MessageParser.new(@message_body).parse_for_address
+      @sender = true
+    end
 
     # création de l'utilisateur s'il n'existe pas
     unless @user = User.find_by_phone_number(@phone_number)
@@ -40,15 +46,26 @@ class MessagesController < ApplicationController
     # sauvegarde du message
     create_message
 
+    @start_address = @parsing[:start_address]
+    @end_address = @parsing[:end_address]
+
+    @start_address_reverse = @parsing[:start_address_reverse]
+    @end_address_reverse = @parsing[:end_address_reverse]
+
+
     #exemple de réponse
-    if @parsing[:start_address] && @parsing[:end_address]
-      @message_body = "Un Uber arrive au #{@parsing[:start_address].formatted_address} pour le #{@parsing[:end_address].formatted_address}"
-    elsif @parsing[:start_address]
-      @message_body = "Un Uber arrive au #{@parsing[:start_address].formatted_address}, nous n'avons pas réussi à trouver l'address de destination, pourriez-vous la donner au chauffeur lorsqu'il arrivera svp ?"
-    elsif @parsing[:end_address]
-      @message_body = "Nous n'avons pas trouvé l'adresse de départ, pourriez-vous la renvoyer avec plus de détail (code postal par exemple) ?"
+    if @start_address_reverse && @end_address_reverse
+      @message_body = "Un Uber arrive au #{@start_address_reverse.formatted_address} pour le #{@end_address_reverse.formatted_address}"
+      create_ride
+    elsif @start_address_reverse
+      @message_body = "Un Uber arrive au #{@start_address_reverse.formatted_address}, pourriez-vous donner l'adresse d'arrivée au chauffeur ?"
+      create_ride
+    elsif @end_address_reverse
+      @message_body = "Pourriez-vous renvoyer l'adress de départ avec plus de détail (code postal par exemple) ?"
+      # l'échange n'est pas terminé, il y a besoin d'un nouveau sms
     elsif
-      @message_body = "Mmmmh, pourriez-vous verifier les adresses, nous n'arrivons pas à les trouver..."
+      @message_body = "Pourriez-vous renvoyer les adresses, avec plus de détail..."
+      # l'échange n'est pas terminé, il y a besoin d'un nouveau sms
     end
 
     if params["Body"]
@@ -73,8 +90,8 @@ class MessagesController < ApplicationController
 
     sms = @client.messages.create(
             from: @apipapi_phone_number,
-            to: phone_number,
-            body: message_body
+            to: @phone_number,
+            body: @message_body
           )
 
     create_message
@@ -82,5 +99,9 @@ class MessagesController < ApplicationController
 
   def create_message
     Message.create(body: @message_body, user: @user, sender: @sender)
+  end
+
+  def create_ride
+    @ride = Ride.create(user: @user, status: "pending", start_address_id: @start_address.id, end_address_id: @end_address.id)
   end
 end

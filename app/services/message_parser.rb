@@ -10,10 +10,12 @@ class MessageParser
     start_address = Address.create(query: split[0])
     end_address = Address.create(query: split[1])
     return {
-      start_address: Geocoder.search("#{start_address.latitude},#{start_address.longitude}")[0],
+      start_address: start_address,
+      start_address_reverse: Geocoder.search("#{start_address.latitude},#{start_address.longitude}")[0],
       start_latitude: start_address.latitude,
       start_longitude: start_address.longitude,
-      end_address: Geocoder.search("#{end_address.latitude},#{end_address.longitude}")[0],
+      end_address: end_address,
+      end_address_reverse: Geocoder.search("#{end_address.latitude},#{end_address.longitude}")[0],
       end_latitude: end_address.latitude,
       end_longitude: end_address.longitude,
     }
