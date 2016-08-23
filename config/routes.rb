@@ -1,14 +1,11 @@
 Rails.application.routes.draw do
-  get 'messages/reply'
 
-  resource :messages do
-    collection do
-      post 'reply'
-    end
-  end
+  resources :messages, only: [:create, :new]
+
+  resources :users, only: [:index, :show]
 
 
   devise_for :users
-  root to: 'pages#home'
+  root to: 'users#index'
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end
