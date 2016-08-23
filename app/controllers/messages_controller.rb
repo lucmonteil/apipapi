@@ -6,53 +6,36 @@ class MessagesController < ApplicationController
   #skip l'auth token pour Devise
   skip_before_action :authenticate_user!, only: [:index, :create, :new]
 
-
   def new
     # sender: true pour selectionner la checkbox par défaut
     @message = Message.new
   end
 
   def create
-
+    @sender = true
     # on verifie si c'est un vrai sms ou pas avec les l'existence de params["Body"]
     if params["Body"]
+      @test = false
       @message_body = params["Body"]
       @phone_number = params["From"]
     else
       # Faux sms
+      @test = true
       @message_body = "Test: " + params[:message][:body]
       @phone_number = params[:message][:user]
     end
-
-    # parsing
-    if @start_address && @end_address
-      @parsing = MessageParser.new(@message_body).parse_for_address
-      @sender = true
-    else
-      @parsing = MessageParser.new(@message_body).parse_for_address
-      @sender = true
-    end
-
     # création de l'utilisateur s'il n'existe pas
-    unless @user = User.find_by_phone_number(@phone_number)
-      @user = User.create({
-                email: "#{@phone_number}@apipapi.com",
-                password: Random.new_seed,
-                phone_number: @phone_number,
-                first_name: "UNKNOWN"
-              })
-    end
-
+    create_user unless @user = User.find_by_phone_number(@phone_number)
     # sauvegarde du message
     create_message
-
+    # parsing
+    @parsing = MessageParser.new(@message_body).parse_for_address
+    # Envoyer dans un service genre boucle while qui fini l'échange ou le continue
+    # ____________ début ____________
     @start_address = @parsing[:start_address]
     @end_address = @parsing[:end_address]
-
     @start_address_reverse = @parsing[:start_address_reverse]
     @end_address_reverse = @parsing[:end_address_reverse]
-
-
     #exemple de réponse
     if @start_address_reverse && @end_address_reverse
       @message_body = "Un Uber arrive au #{@start_address_reverse.formatted_address} pour le #{@end_address_reverse.formatted_address}"
@@ -67,17 +50,16 @@ class MessagesController < ApplicationController
       @message_body = "Pourriez-vous renvoyer les adresses, avec plus de détail..."
       # l'échange n'est pas terminé, il y a besoin d'un nouveau sms
     end
-
-    if params["Body"]
-      #envoit d'une réponse qu'aux vrais numéros, l'enregristement se fait dans le reply
-      reply
-    else
+    # _____________ fin _____________
+    if @test
       #sauvegarde de la réponse sans l'envoyer
       @message_body = "Test : " + @message_body
       @sender = false
       create_message
+    else
+      #envoit d'une réponse qu'aux vrais numéros, l'enregristement se fait dans le reply
+      reply
     end
-
     redirect_to user_path(@user)
   end
 
@@ -93,8 +75,16 @@ class MessagesController < ApplicationController
             to: @phone_number,
             body: @message_body
           )
-
     create_message
+  end
+
+  def create_user
+    @user = User.create({
+              email: "#{@phone_number}@apipapi.com",
+              password: Random.new_seed,
+              phone_number: @phone_number,
+              first_name: "UNKNOWN"
+            })
   end
 
   def create_message
