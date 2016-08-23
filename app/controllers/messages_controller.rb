@@ -18,7 +18,7 @@ class MessagesController < ApplicationController
       @message_body = params["Body"]
       @phone = params["From"]
     else
-      @message_body = params[:message][:body]
+      @message_body = "Test" + params[:message][:body]
       # l'interface web permet aussi de générer des fakes réponses
       @sender = params[:message][:sender] ==  "0" ? false : true
       @phone = params[:message][:user]
@@ -37,7 +37,7 @@ class MessagesController < ApplicationController
 
     # 1) Parse message
     start_end_addresses = MessageParser.new(@message_body).parse_for_address
-    raise
+    reply
     redirect_to user_path(@user)
   end
 
