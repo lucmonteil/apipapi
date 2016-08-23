@@ -36,8 +36,9 @@ class MessagesController < ApplicationController
     create_message
 
     # 1) Parse message
-    start_end_addresses = MessageParser.new(@message_body).parse_for_address
-    raise
+    @start_end_addresses = MessageParser.new(@message_body).parse_for_address
+    @start_end_addresses[:phone] = @phone
+    reply
     redirect_to user_path(@user)
   end
 
@@ -50,7 +51,7 @@ class MessagesController < ApplicationController
     # UberService.new(args).action
 
 
-    @message_body = "Hello world!"
+    @message_body = @start_end_addresses.to_s
 
     # 3) Compose reply body
     sms = @client.messages.create(
