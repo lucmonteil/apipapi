@@ -4,7 +4,7 @@ class UsersController < ApplicationController
   def show
     @user = User.find(params[:id])
     @messages = Message.where(user: @user).order("created_at DESC")
-    @message = Message.new(sender: true)
+    @message = Message.new
   end
 
   def index

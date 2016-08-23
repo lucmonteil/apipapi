@@ -8,71 +8,79 @@ class MessagesController < ApplicationController
 
 
   def new
-    @message = Message.new(sender: true)
+    # sender: true pour selectionner la checkbox par défaut
+    @message = Message.new
   end
 
   def create
-    @sender = true
     # on verifie si c'est un vrai sms ou pas avec les l'existence de params["Body"]
     if params["Body"]
       @message_body = params["Body"]
-      @phone = params["From"]
+      @phone_number = params["From"]
     else
-      @message_body = "Test" + params[:message][:body]
-      # l'interface web permet aussi de générer des fakes réponses
-      @sender = params[:message][:sender] ==  "0" ? false : true
-      @phone = params[:message][:user]
+      # Faux sms
+      @message_body = "Test: " + params[:message][:body]
+      @phone_number = params[:message][:user]
     end
-    # création de l'utilisateur pour tester
-    unless @user = User.find_by_phone_number(@phone)
-      @user = User.new
-      @user.email = "#{@phone}@apipapi.com"
-      @user.password = Random.new_seed
-      @user.phone_number = @phone
-    # dans les view user on utilise le first_name TEST pour différencier les tests des vrais users
-      @user.first_name = "TEST"
-      @user.save
+
+    # parsing
+    @parsing = MessageParser.new(@message_body).parse_for_address
+    @sender = true
+
+    # création de l'utilisateur s'il n'existe pas
+    unless @user = User.find_by_phone_number(@phone_number)
+      @user = User.create({
+                email: "#{@phone_number}@apipapi.com",
+                password: Random.new_seed,
+                phone_number: @phone_number,
+                first_name: "UNKNOWN"
+              })
     end
+
+    # sauvegarde du message
     create_message
 
-    # 1) Parse message
+    #exemple de réponse
+    if @parsing[:start_address] && @parsing[:end_address]
+      @message_body = "Un Uber arrive au #{@parsing[:start_address].formatted_address} pour le #{@parsing[:end_address].formatted_address}"
+    elsif @parsing[:start_address]
+      @message_body = "Un Uber arrive au #{@parsing[:start_address].formatted_address}, nous n'avons pas réussi à trouver l'address de destination, pourriez-vous la donner au chauffeur lorsqu'il arrivera svp ?"
+    elsif @parsing[:end_address]
+      @message_body = "Nous n'avons pas trouvé l'adresse de départ, pourriez-vous la renvoyer avec plus de détail (code postal par exemple) ?"
+    elsif
+      @message_body = "Mmmmh, pourriez-vous verifier les adresses, nous n'arrivons pas à les trouver..."
+    end
 
-    @start_end_addresses = MessageParser.new(@message_body).parse_for_address
-    @start_end_addresses[:phone] = @phone
+    if params["Body"]
+      #envoit d'une réponse qu'aux vrais numéros, l'enregristement se fait dans le reply
+      reply
+    else
+      #sauvegarde de la réponse sans l'envoyer
+      @message_body = "Test : " + @message_body
+      @sender = false
+      create_message
+    end
 
-    reply
     redirect_to user_path(@user)
-  end
-
-  def reply
-    @sender = false
-    boot_twilio
-
-    # 2) define if request or validation message
-    # 2.1) Create a pricing estimate or order ride
-    # UberService.new(args).action
-
-
-    @message_body = @start_end_addresses.to_s
-
-    # 3) Compose reply body
-    sms = @client.messages.create(
-      from: ENV['TWILIO_NUMBER'],
-      to: @phone,
-      body: @message_body
-    )
-
-    create_message
-
   end
 
   private
 
-  def boot_twilio
+  def reply
+    @sender = false
     @client = Twilio::REST::Client.new ENV['TWILIO_SID'], ENV['TWILIO_TOKEN']
+    @apipapi_phone_number = ENV['TWILIO_NUMBER']
+
+    sms = @client.messages.create(
+            from: @apipapi_phone_number,
+            to: phone_number,
+            body: message_body
+          )
+
+    create_message
   end
 
   def create_message
-    @message = Message.create(body: @message_body, user: @user, sender: @sender)
+    Message.create(body: @message_body, user: @user, sender: @sender)
   end
 end

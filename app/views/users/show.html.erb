@@ -6,7 +6,7 @@
       <div class="flex">
         <h3><%= @user.phone_number %></h3>
         <h3>
-          <% if @user.first_name == "TEST" %>
+          <% if @user.first_name == "UNKNOWN" %>
             <span class="label label-info"><%= " #{@user.first_name}" %></span>
           <% else %>
             <%= " #{@user.first_name} #{@user.last_name}" %>
@@ -21,7 +21,6 @@
       <%= simple_form_for @message, url: messages_path do |f| %>
         <%= f.input :body, label: "Corps du message" %>
         <%= f.input :user, as: :hidden, input_html: { value: @user.phone_number } %>
-        <%= f.input :sender, label: "SMS reçu par ApiPapi" %>
         <%= f.button :submit%>
       <% end %>
     </li>
