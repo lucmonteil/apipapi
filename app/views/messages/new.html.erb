@@ -1,9 +1,15 @@
 <div class="container">
+  <div class="margin-top">
+  </div>
+  <div class="text-center">
+    <%= link_to '< Annuler', users_path %>
+  </div>
   <div class="padded">
     <%= simple_form_for @message do |f| %>
-      <%= f.input :body %>
+      <%= f.input :body, label: "Corps du message" %>
       <%= f.input :user, label: "Phone number" %>
-      <%= f.button :submit %>
+      <%= f.input :sender, label: "SMS reçu par ApiPapi" %>
+      <%= f.button :submit%>
     <% end %>
   </div>
 </div>

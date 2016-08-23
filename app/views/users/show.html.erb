@@ -1,16 +1,27 @@
 <div class="container">
   <div class="margin-top"></div>
-  <%= link_to '< Tous les utilisateurs', users_path %>
   <div class="margin-top"></div>
   <ul class="list-group">
     <li class="list-group-item">
-      <h3><%= @user.phone_number %></h3><h3><%= @user.first_name.to_s + @user.last_name.to_s %></h3>
+      <div class="flex">
+        <h3><%= @user.phone_number %></h3>
+        <h3>
+          <% if @user.first_name == "TEST" %>
+            <span class="label label-info"><%= " #{@user.first_name}" %></span>
+          <% else %>
+            <%= " #{@user.first_name} #{@user.last_name}" %>
+          <% end %>
+        </h3>
+      </div>
+    </li>
+    <li class="list-group-item">
+      <%= link_to '< Tous les utilisateurs', users_path %>
     </li>
     <li class="list-group-item">
       <%= simple_form_for @message, url: messages_path do |f| %>
         <%= f.input :body, label: "Corps du message" %>
         <%= f.input :user, as: :hidden, input_html: { value: @user.phone_number } %>
-        <%= f.input :sender, label: "Message test (n'envoit pas de SMS)" %>
+        <%= f.input :sender, label: "SMS reçu par ApiPapi" %>
         <%= f.button :submit%>
       <% end %>
     </li>

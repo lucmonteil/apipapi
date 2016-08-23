@@ -8,7 +8,7 @@ class MessagesController < ApplicationController
 
 
   def new
-    @message = Message.new
+    @message = Message.new(sender: true)
   end
 
   def create
@@ -28,10 +28,14 @@ class MessagesController < ApplicationController
       @user.email = "#{@phone}@apipapi.com"
       @user.password = Random.new_seed
       @user.phone_number = @phone
+      @user.first_name = "TEST"
       @user.save
     end
     create_message
-    redirect_to user_path(@user)
+    respond_to do |format|
+      format.html { redirect_to user_path(@user) }
+      format.js  # <-- will render `app/views/reviews/create.js.erb`
+    end
   end
 
   def reply
@@ -53,6 +57,6 @@ class MessagesController < ApplicationController
   end
 
   def create_message
-    Message.create(body: @message_body, user: @user, sender: @sender)
+    @message = Message.create(body: @message_body, user: @user, sender: @sender)
   end
 end
