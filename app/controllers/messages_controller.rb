@@ -1,14 +1,48 @@
 class MessagesController < ApplicationController
 
- #vérifier le skip_before_filter (skipp la vérification de l'auth token)
- skip_before_filter :verify_authenticity_token
+  #vérifier le skip_before_action (skip la vérification de l'auth token)
+  skip_before_action :verify_authenticity_token
 
- #skip l'auth token pour Devise
- skip_before_filter :authenticate_user!, :only => "reply"
+  #skip l'auth token pour Devise
+  skip_before_action :authenticate_user!, only: [:index, :create, :new]
+
+
+  def new
+    @message = Message.new(sender: true)
+  end
+
+  def create
+    @sender = true
+    # on verifie si c'est un vrai sms ou pas avec les l'existence de params["Body"]
+    if params["Body"]
+      @message_body = params["Body"]
+      @phone = params["From"]
+    else
+      @message_body = params[:message][:body]
+      # l'interface web permet aussi de générer des fakes réponses
+      @sender = params[:message][:sender] ==  "0" ? false : true
+      @phone = params[:message][:user]
+    end
+    # création de l'utilisateur pour tester
+    unless @user = User.find_by_phone_number(@phone)
+      @user = User.new
+      @user.email = "#{@phone}@apipapi.com"
+      @user.password = Random.new_seed
+      @user.phone_number = @phone
+    # dans les view user on utilise le first_name TEST pour différencier les tests des vrais users
+      @user.first_name = "TEST"
+      @user.save
+    end
+    create_message
+    # test mis à jour de la table en temps réel
+    respond_to do |format|
+      format.html { redirect_to user_path(@user) }
+      format.js  # <-- will render `app/views/reviews/create.js.erb`
+    end
+  end
 
   def reply
-    message_body = params["Body"]
-    from_number = params["From"]
+    @sender = false
     boot_twilio
 
     # 1) Parse message
@@ -16,17 +50,28 @@ class MessagesController < ApplicationController
     # 2) define if request or validation message
     # 2.1) Create a pricing estimate or order ride
     # UberService.new(args).action
+
+
+    @message_body = "Hello world!"
+
     # 3) Compose reply body
     sms = @client.messages.create(
       from: ENV['TWILIO_NUMBER'],
-      to: '+33665579224',
-      body: "Hello there, thanks for texting me. Your number is #{from_number}."
+      to: @phone,
+      body: @message_body
     )
+
+    create_message
+
   end
 
   private
 
   def boot_twilio
     @client = Twilio::REST::Client.new ENV['TWILIO_SID'], ENV['TWILIO_TOKEN']
+  end
+
+  def create_message
+    @message = Message.create(body: @message_body, user: @user, sender: @sender)
   end
 end

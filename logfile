@@ -1,0 +1,5 @@
+LOG:  database system was shut down at 2016-08-22 17:18:28 CEST
+LOG:  MultiXact member wraparound protections are now enabled
+LOG:  autovacuum launcher started
+LOG:  database system is ready to accept connections
+FATAL:  database "apipapi_development" does not exist
