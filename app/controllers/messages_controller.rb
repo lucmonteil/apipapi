@@ -34,19 +34,17 @@ class MessagesController < ApplicationController
       @user.save
     end
     create_message
-    # test mis à jour de la table en temps réel
-    respond_to do |format|
-      format.html { redirect_to user_path(@user) }
-      format.js  # <-- will render `app/views/reviews/create.js.erb`
-    end
+
+    # 1) Parse message
+    start_end_addresses = MessageParser.new(@message_body).parse_for_address
+    raise
+    redirect_to user_path(@user)
   end
 
   def reply
     @sender = false
     boot_twilio
 
-    # 1) Parse message
-    # parsed_message = MessageParser.new(message_body).parse
     # 2) define if request or validation message
     # 2.1) Create a pricing estimate or order ride
     # UberService.new(args).action
