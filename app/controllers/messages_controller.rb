@@ -44,13 +44,25 @@ class MessagesController < ApplicationController
   def reply
     @sender = false
     boot_twilio
+
+    # 1) Parse message
+    # parsed_message = MessageParser.new(message_body).parse
+    # 2) define if request or validation message
+    # 2.1) Create a pricing estimate or order ride
+    # UberService.new(args).action
+
+
     @message_body = "Hello world!"
+
+    # 3) Compose reply body
     sms = @client.messages.create(
       from: ENV['TWILIO_NUMBER'],
       to: @phone,
-      body: body
+      body: @message_body
     )
+
     create_message
+
   end
 
   private
