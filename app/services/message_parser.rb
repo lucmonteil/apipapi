@@ -4,16 +4,17 @@ class MessageParser
     @message_body = message_body
   end
 
-  def parse
-    message_hash = {}
-    if @message_body = 'ok'
-      message_hash[validate] = true
-    elsif @message_body = 'nok'
-      message_hash[validate] = false
-    else
-      message_hash =>...
-    end
+  def parse_for_address
+    split = @message_body.split(";")
 
+    start_address = Address.create(query: split[0])
+    end_address = Address.create(query: split[1])
+    return {
+        start_latitude: start_address.latitude,
+        start_longitude: start_address.longitude,
+        end_latitude: end_address.latitude,
+        end_longitude: end_address.longitude,
+    }
   end
 
 end

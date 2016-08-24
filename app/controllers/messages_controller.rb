@@ -18,7 +18,7 @@ class MessagesController < ApplicationController
       @message_body = params["Body"]
       @phone = params["From"]
     else
-      @message_body = params[:message][:body]
+      @message_body = "Test" + params[:message][:body]
       # l'interface web permet aussi de générer des fakes réponses
       @sender = params[:message][:sender] ==  "0" ? false : true
       @phone = params[:message][:user]
@@ -35,6 +35,12 @@ class MessagesController < ApplicationController
     end
     create_message
 
+    # 1) Parse message
+
+    @start_end_addresses = MessageParser.new(@message_body).parse_for_address
+    @start_end_addresses[:phone] = @phone
+
+    reply
     redirect_to user_path(@user)
   end
 
@@ -42,14 +48,12 @@ class MessagesController < ApplicationController
     @sender = false
     boot_twilio
 
-    # 1) Parse message
-    # parsed_message = MessageParser.new(message_body).parse
     # 2) define if request or validation message
     # 2.1) Create a pricing estimate or order ride
     # UberService.new(args).action
 
 
-    @message_body = "Hello world!"
+    @message_body = @start_end_addresses.to_s
 
     # 3) Compose reply body
     sms = @client.messages.create(
