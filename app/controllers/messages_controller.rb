@@ -34,11 +34,8 @@ class MessagesController < ApplicationController
       @user.save
     end
     create_message
-    # test mis à jour de la table en temps réel
-    respond_to do |format|
-      format.html { redirect_to user_path(@user) }
-      format.js  # <-- will render `app/views/reviews/create.js.erb`
-    end
+
+    redirect_to user_path(@user)
   end
 
   def reply
