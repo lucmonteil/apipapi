@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160823133552) do
+ActiveRecord::Schema.define(version: 20160824112439) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -19,10 +19,8 @@ ActiveRecord::Schema.define(version: 20160823133552) do
     t.string   "query"
     t.float    "latitude"
     t.float    "longitude"
-    t.datetime "created_at",       null: false
-    t.datetime "updated_at",       null: false
-    t.integer  "start_address_id"
-    t.integer  "end_address_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "messages", force: :cascade do |t|
@@ -34,14 +32,23 @@ ActiveRecord::Schema.define(version: 20160823133552) do
     t.index ["user_id"], name: "index_messages_on_user_id", using: :btree
   end
 
-  create_table "rides", force: :cascade do |t|
+  create_table "requests", force: :cascade do |t|
     t.integer  "user_id"
+    t.string   "service_type"
+    t.integer  "service_id"
+    t.boolean  "wait_message"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+    t.index ["service_type", "service_id"], name: "index_requests_on_service_type_and_service_id", using: :btree
+    t.index ["user_id"], name: "index_requests_on_user_id", using: :btree
+  end
+
+  create_table "rides", force: :cascade do |t|
     t.string   "status"
     t.datetime "created_at",       null: false
     t.datetime "updated_at",       null: false
     t.integer  "start_address_id"
     t.integer  "end_address_id"
-    t.index ["user_id"], name: "index_rides_on_user_id", using: :btree
   end
 
   create_table "users", force: :cascade do |t|
@@ -65,5 +72,5 @@ ActiveRecord::Schema.define(version: 20160823133552) do
   end
 
   add_foreign_key "messages", "users"
-  add_foreign_key "rides", "users"
+  add_foreign_key "requests", "users"
 end
