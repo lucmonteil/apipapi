@@ -64,7 +64,7 @@ ActiveRecord::Schema.define(version: 20160824112439) do
     t.inet     "last_sign_in_ip"
     t.datetime "created_at",                          null: false
     t.datetime "updated_at",                          null: false
-    t.text     "phone_number"
+    t.string   "phone_number"
     t.string   "first_name"
     t.string   "last_name"
     t.index ["email"], name: "index_users_on_email", unique: true, using: :btree

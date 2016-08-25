@@ -6,8 +6,8 @@
 
 // Paddings
 .padded {
-  padding-top: 5em;
-  padding-bottom: 5em;
+  padding-top: 3em;
+  padding-bottom: 3em;
 }
 
 // Backgrounds
@@ -15,10 +15,10 @@
   background: #4a4a4a;
 }
 .bg-grey {
-  background: #aeaeae;
+  background: #E6E6E6;
 }
 .bg-blue {
-  background: #00a3e1;
+  background: #274060;
 }
 .bg-dark-blue {
   background: #3b5998;
@@ -27,7 +27,6 @@
 .margin-top {
   height: 30px;
 }
-
 
 .flex {
   display: flex;
@@ -58,4 +57,88 @@
 
 .bottom-space {
   height: 110px;
+}
+
+.fa-arrow-circle-up {
+  font-size: 78px;
+  padding-top: 30px;
+}
+
+#chat {
+  margin-bottom: 15px;
+  border-radius: 10px;
+}
+
+#order_content{
+  box-shadow: inset 0px -14px $yellow
+}
+
+.logo {
+  height: 100px;
+}
+
+
+// à utiliser si l'on souhaite mettre un effet par la suite
+/* Icon Up */
+@-webkit-keyframes hvr-icon-up {
+  0%,
+  50%,
+  100% {
+    -webkit-transform: translateY(0);
+    transform: translateY(0);
+  }
+
+  25%,
+  75% {
+    -webkit-transform: translateY(-6px);
+    transform: translateY(-6px);
+  }
+}
+
+@keyframes hvr-icon-up {
+  0%,
+  50%,
+  100% {
+    -webkit-transform: translateY(0);
+    transform: translateY(0);
+  }
+
+  25%,
+  75% {
+    -webkit-transform: translateY(-6px);
+    transform: translateY(-6px);
+  }
+}
+
+/* Icon Up */
+.hvr-icon-up {
+  display: inline-block;
+  vertical-align: middle;
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  box-shadow: 0 0 1px rgba(0, 0, 0, 0);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  -moz-osx-font-smoothing: grayscale;
+  position: relative;
+  padding-right: 2.2em;
+}
+
+.hvr-icon-up:before {
+  content: "\f01b";
+  position: absolute;
+  right: 1em;
+  padding: 0 1px;
+  font-family: FontAwesome;
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+}
+
+.hvr-icon-up:hover:before, .hvr-icon-up:focus:before, .hvr-icon-up:active:before {
+  -webkit-animation-name: hvr-icon-up;
+  animation-name: hvr-icon-up;
+  -webkit-animation-duration: 0.75s;
+  animation-duration: 0.75s;
+  -webkit-animation-timing-function: ease-out;
+  animation-timing-function: ease-out;
 }
