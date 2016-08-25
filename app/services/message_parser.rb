@@ -43,7 +43,10 @@ class MessageParser
       @ride.save
     end
 
-    @answer_body_message = UberService.new(@ride).estimate_price
+    @price = UberService.new(@ride).price_estimates
+    @time = UberService.new(@ride).time_estimates
+
+    @answer_body_message = "Le prix de la course de #{@ride.start_address.query} à #{@ride.end_address.query} est de #{@price} (il arrive dans #{@time/60} minutes)"
 
     # # réponses en fonction de la situation
     # if @ride.start_address && @ride.end_address

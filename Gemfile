@@ -23,6 +23,9 @@ gem 'twilio-ruby'
 #Geocoder
 gem 'geocoder'
 
+#Uber
+gem 'uber-ruby', require: 'uber'
+
 group :development, :test do
   gem 'binding_of_caller'
   gem 'better_errors'
