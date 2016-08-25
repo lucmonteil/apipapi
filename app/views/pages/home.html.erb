@@ -1,2 +1,53 @@
-<h1>Pages#home</h1>
-<p>Find me in app/views/pages/home.html.erb</p>
+<!-- <div class="banner" style="background-image: linear-gradient(-225deg, rgba(0,101,168,0.6) 0%, rgba(0,36,61,0.6) 50%), url(<%= image_path 'old_waiting.jpeg' %>;)">
+  <div class="row">
+    <div class="col-xs-12 banner-content">
+      <h1>Happy Papi</h1>
+      <p>Stop waiting</p>
+      <p>Order a <span>Driver</span> in 2 minutes.</p>
+    </div>
+    <div class="col-xs-12 banner-content">
+      <form class="form-inline">
+        <div class="form-group">
+          <label class="sr-only" for="exampleInputEmail3">Email address</label>
+          <input type="email" class="form-control" id="exampleInputEmail3" placeholder="I would like...">
+        </div>
+        <a href="#" class="btn-medium">Request</a></form>
+    </div>
+  </div>
+</div> -->
+
+
+<div class="wrapper-blue">
+  <div class="container bg-blue">
+    <div class="row">
+      <div class="col-xs-12 padded banner-home">
+        <h1>
+          <%= image_tag "logo_grey.png", class: "logo" %> Happy Papi
+        </h1>
+        <p>Order a
+          <span id="order_content">Driver</span>
+        </p>
+        <p> easily, <strong>without a smartphone</strong>.
+        </p>
+      </div>
+   </div>
+  </div>
+  <div class="container bg-blue">
+    <div class="row">
+      <div class="col-xs-8 col-xs-offset-2 padded ">
+        <div>
+          <form class="form-inline">
+            <div class="form-group banner-demo-search">
+              <input type="email" class="form-control text-center" id="chat" placeholder="I would like...">
+            </div>
+          </form>
+        </div>
+        <div class="banner-demo-explanation">
+          <i class="fa fa-arrow-circle-up" aria-hidden="true"></i>
+          <p><strong>Type something or send a sms to the 07 56 79 64 81</strong>  </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
