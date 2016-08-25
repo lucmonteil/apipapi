@@ -19,10 +19,8 @@ ActiveRecord::Schema.define(version: 20160823133552) do
     t.string   "query"
     t.float    "latitude"
     t.float    "longitude"
-    t.datetime "created_at",       null: false
-    t.datetime "updated_at",       null: false
-    t.integer  "start_address_id"
-    t.integer  "end_address_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "messages", force: :cascade do |t|
@@ -57,7 +55,7 @@ ActiveRecord::Schema.define(version: 20160823133552) do
     t.inet     "last_sign_in_ip"
     t.datetime "created_at",                          null: false
     t.datetime "updated_at",                          null: false
-    t.text     "phone_number"
+    t.string   "phone_number"
     t.string   "first_name"
     t.string   "last_name"
     t.index ["email"], name: "index_users_on_email", unique: true, using: :btree
