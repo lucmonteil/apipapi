@@ -28,8 +28,11 @@ class MessageParser
     # le service a été rendu ou qu'un temps X c'est passé depuis le dernier sms
     if @ride.end_address
       parse_for_start_address
+      geocode(@found_start_address, "start")
     else
       parse_for_start_and_end_address
+      geocode(@found_start_address, "start")
+      geocode(@found_end_address, "end")
     end
 
     if @ride.start_address = @start_address
@@ -74,23 +77,6 @@ class MessageParser
     @ride = Ride.create(status: "pending")
   end
 
-  # ces methodes seront refaites dans RECAST.AI
-  def parse_for_start_and_end_address
-    # ici la pire AI du monde !
-    split = @message_body.split(";")
-    start_address = split[0]
-    end_address = split[1]
-
-    # refactorisation pour le kiff
-    geocode(start_address, "start")
-    geocode(end_address, "end")
-  end
-
-  def parse_for_start_address
-    # ici même pas de split, on prend toute la string
-    geocode(@message_body, "start")
-  end
-
   def geocode(searched_address, prefix)
     address = Address.new(query: searched_address)
     address.validate # triggers geocoder
@@ -100,5 +86,21 @@ class MessageParser
       instance_variable_set("@#{prefix}_address_nice", Geocoder.search("#{lat},#{lng}")[0].formatted_address)
       instance_variable_set("@#{prefix}_address", address)
     end
+  end
+
+  # ces methodes seront refaites dans RECAST.AI
+  def parse_for_start_and_end_address
+    # ici la pire AI du monde !
+    split = @message_body.split(";")
+    @found_start_address = split[0]
+    @found_end_address = split[1]
+
+    # refactorisation pour le kiff
+
+  end
+
+  def parse_for_start_address
+    # ici même pas de split, on prend toute la string
+    @found_start_address = @message_body
   end
 end
