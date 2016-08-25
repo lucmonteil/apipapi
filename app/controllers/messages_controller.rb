@@ -6,73 +6,94 @@ class MessagesController < ApplicationController
   #skip l'auth token pour Devise
   skip_before_action :authenticate_user!, only: [:index, :create, :new]
 
-
   def new
-    @message = Message.new(sender: true)
+    @message = Message.new
   end
 
+  # Methode pour les sms test
   def create
+    # les messages sont envoyés par l'utilisateur
     @sender = true
-    # on verifie si c'est un vrai sms ou pas avec les l'existence de params["Body"]
-    if params["Body"]
-      @message_body = params["Body"]
-      @phone = params["From"]
-    else
-      @message_body = "Test" + params[:message][:body]
-      # l'interface web permet aussi de générer des fakes réponses
-      @sender = params[:message][:sender] ==  "0" ? false : true
-      @phone = params[:message][:user]
-    end
-    # création de l'utilisateur pour tester
-    unless @user = User.find_by_phone_number(@phone)
-      @user = User.new
-      @user.email = "#{@phone}@apipapi.com"
-      @user.password = Random.new_seed
-      @user.phone_number = @phone
-    # dans les view user on utilise le first_name TEST pour différencier les tests des vrais users
-      @user.first_name = "TEST"
-      @user.save
-    end
-    create_message
-
-    # 1) Parse message
-
-    @start_end_addresses = MessageParser.new(@message_body).parse_for_address
-    @start_end_addresses[:phone] = @phone
-
-    reply
-    redirect_to user_path(@user)
+    # les messages sont des tests
+    @test = true
+    @message_body = params[:message][:body]
+    @phone_number = params[:message][:user]
+    # création de l'utilisateur s'il n'existe pas
+    # sauvegarde du message
+    # parsing
+    # répartition vers la bonne methode
+    set_user_create_message_parse_and_point
   end
 
-  def reply
-    @sender = false
-    boot_twilio
-
-    # 2) define if request or validation message
-    # 2.1) Create a pricing estimate or order ride
-    # UberService.new(args).action
-
-
-    @message_body = @start_end_addresses.to_s
-
-    # 3) Compose reply body
-    sms = @client.messages.create(
-      from: ENV['TWILIO_NUMBER'],
-      to: @phone,
-      body: @message_body
-    )
-
-    create_message
-
+  # Idem pour les vrais sms
+  def receive_sms
+    # TO DO : ajouter l'url dans Twilio (/messages/sms)
+    @sender = true
+    @test = false
+    @message_body = params["Body"]
+    @phone_number = params["From"]
+    set_user_create_message_parse_and_point
   end
 
   private
 
-  def boot_twilio
+  def set_user_create_message_parse_and_point
+    create_user unless @user = User.find_by_phone_number(@phone_number)
+    create_message
+    parse_and_point
+  end
+
+  # interprète le corps parsé et renvoit vers la bonne méthode
+  def parse_and_point
+    @reply_message_body = MessageParser.new(@message_body, @user).point_to_service
+
+    # en cas de test...
+    fake_reply if @test
+
+    # ...et le contraire
+    reply unless @test
+
+    # enregistrement du message
+    create_message
+
+    redirect_to user_path(@user)
+  end
+
+  # envoit d'un message à l'utilisateur et sauvegarde du message
+  def reply
+    # les messages sont envoyés à l'utilisateur
+    @sender = false
+    # envoit du message avec Twilio
     @client = Twilio::REST::Client.new ENV['TWILIO_SID'], ENV['TWILIO_TOKEN']
+    @apipapi_phone_number = ENV['TWILIO_NUMBER']
+    sms = @client.messages.create(
+            from: @apipapi_phone_number,
+            to: @phone_number,
+            body: @reply_message_body
+          )
+  end
+
+  #sauvegarde de la réponse sans l'envoyer
+  def fake_reply
+    @sender = false
+    @message_body = @reply_message_body
+  end
+
+  def create_user
+    @user = User.create({
+              email: "#{@phone_number}@apipapi.com",
+              password: Random.new_seed,
+              phone_number: @phone_number,
+              # le nom de l'utilisateur est set à UNKNOWN pour l'utiliser dans les vues
+              first_name: "UNKNOWN"
+            })
   end
 
   def create_message
-    @message = Message.create(body: @message_body, user: @user, sender: @sender)
+    if @test
+    Message.create(body: "Test : " + @message_body, user: @user, sender: @sender)
+    else
+    Message.create(body: @message_body, user: @user, sender: @sender)
+    end
   end
 end
