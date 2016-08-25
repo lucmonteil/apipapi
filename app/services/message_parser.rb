@@ -26,7 +26,7 @@ class MessageParser
   def conversation_ride
     # TODO créer la colonne waiting_for_sms et set la valeur à false quand
     # le service a été rendu ou qu'un temps X c'est passé depuis le dernier sms
-    if @end_address_nice
+    if @ride.end_address
       parse_for_start_address
     else
       parse_for_start_and_end_address

@@ -27,7 +27,7 @@ class MessagesController < ApplicationController
 
   # Idem pour les vrais sms
   def receive_sms
-    # TO DO : créer la route pour twilio
+    # TO DO : ajouter l'url dans Twilio (/messages/sms)
     @sender = true
     @test = false
     @message_body = params["Body"]
