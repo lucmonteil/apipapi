@@ -45,7 +45,7 @@ class MessagesController < ApplicationController
 
   # interprète le corps parsé et renvoit vers la bonne méthode
   def parse_and_point
-    @reply_message_body = MessageParser.new(@message_body, @user).point
+    @reply_message_body = MessageParser.new(@message_body, @user).point_to_service
 
     # en cas de test...
     fake_reply if @test

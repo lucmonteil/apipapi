@@ -1,22 +1,31 @@
 <div class="container">
-  <div class="margin-top"></div>
-  <div class="margin-top"></div>
   <ul class="list-group">
-    <li class="list-group-item">
-      <div class="flex">
-        <h3><%= @user.phone_number %></h3>
-        <h3>
-          <% if @user.first_name == "UNKNOWN" %>
-            <span class="label label-info"><%= " #{@user.first_name}" %></span>
-          <% else %>
-            <%= " #{@user.first_name} #{@user.last_name}" %>
-          <% end %>
-        </h3>
-      </div>
-    </li>
-    <li class="list-group-item">
-      <%= link_to '< Tous les utilisateurs', users_path %>
-    </li>
+    <%= time = "" %>
+    <% @messages.each do |message| %>
+      <% if  message.created_at.to_s[0..14] != time %>
+      <% time = message.created_at.to_s[0..14] %>
+      <li class="list-group-item">
+        <%= message.created_at.to_s[0..10] %>
+      </li>
+      <% end %>
+        <li class="list-group-item">
+          <div >
+            <div class="flex">
+              <p>
+                <% if message.sender %>
+                  <strong>Utilisateur</strong>
+                <% else %>
+                  <strong>ApiPapi</strong>
+                <% end %>
+                <%= message.created_at.to_s[-12..-4] %>
+              </p>
+            </div>
+            <div class="">
+              <p><%= message.body %></p>
+            </div>
+          </div>
+        </li>
+    <% end %>
     <li class="list-group-item">
       <%= simple_form_for @message, url: messages_path do |f| %>
         <%= f.input :body, label: "Corps du message" %>
@@ -24,27 +33,20 @@
         <%= f.button :submit%>
       <% end %>
     </li>
-    <li class="list-group-item text-center" style="color:grey">
-      <%= @user.messages.count.to_s + " messages (#{@user.messages.where(sender: true).count.to_s} envoyés, #{@user.messages.where(sender: false).count.to_s} reçus)" %>
-    </li>
-    <% @messages.each do |message| %>
-      <li class="list-group-item">
-        <ul class="list-group">
-          <li class="list-group-item flex">
-            <p>
-              <% if message.sender %>
-                <span class="label label-default">Utilisateur</span>
-              <% else %>
-                <span class="label label-info">ApiPapi</span>
-              <% end %>
-            </p>
-            <p><%= message.created_at.to_s[0..18] %></p>
-          </li>
-          <li class="list-group-item">
-            <strong><%= message.body %></strong>
-          </li>
-        </ul>
-      </li>
-    <% end %>
   </ul>
+</div>
+<a name="bottom"></a>
+<div class="flex top-bar">
+  <div style="padding:5px"><%= link_to '< Tous les utilisateurs', users_path %></div>
+  <div class="text-center">
+    <h4 style="padding:0px; margin:5px"><%= @user.phone_number %></h4>
+    <div style="color: grey; font-size:0.9em"><%= @user.messages.count.to_s + " messages (#{@user.messages.where(sender: true).count.to_s} envoyés, #{@user.messages.where(sender: false).count.to_s} reçus)" %></div>
+  </div>
+  <h3>
+    <% if @user.first_name == "UNKNOWN" %>
+      <span class="label label-info"><%= " #{@user.first_name}" %></span>
+    <% else %>
+      <%= " #{@user.first_name} #{@user.last_name}" %>
+    <% end %>
+  </h3>
 </div>
