@@ -1,34 +1,9 @@
 <body onload="scrollTo(0,document.body.scrollHeight)">
 
 <div class="top-space"></div>
+  <%= render 'messages', messages: @messages %>
+<ul class="list-group" id="messages">
 
-<ul class="list-group">
-  <%= time = "" %>
-  <% @messages.each do |message| %>
-    <% if  message.created_at.to_s[0..14] != time %>
-    <% time = message.created_at.to_s[0..14] %>
-    <li class="list-group-item">
-      <%= message.created_at.to_s[0..10] %>
-    </li>
-    <% end %>
-      <li class="list-group-item">
-        <div >
-          <div class="flex">
-            <p>
-              <% if message.sender %>
-                <strong>Utilisateur</strong>
-              <% else %>
-                <strong>ApiPapi</strong>
-              <% end %>
-              <%= message.created_at.to_s[-12..-4] %>
-            </p>
-          </div>
-          <div class="">
-            <p><%= message.body %></p>
-          </div>
-        </div>
-      </li>
-  <% end %>
 </ul>
 
 <div class="bottom-space"></div>
@@ -53,7 +28,7 @@
     <%= simple_form_for @message, url: messages_path do |f| %>
       <%= f.input :body, label: false %>
       <%= f.input :user, as: :hidden, input_html: { value: @user.phone_number } %>
-      <%= f.button :submit%>
+      <%= f.button :submit %>
     <% end %>
   </div>
 </div>

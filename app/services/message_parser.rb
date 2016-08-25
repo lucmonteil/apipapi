@@ -24,16 +24,16 @@ class MessageParser
   end
 
   def conversation_ride
-    # TODO créer la colonne waiting_for_sms et set la valeur à false quand
+    # TODO bug quand on trouve deux addresses
     # le service a été rendu ou qu'un temps X c'est passé depuis le dernier sms
-    if @ride.end_address
-      parse_for_start_address
-      geocode(@found_start_address, "start")
-    else
+    # if @ride.end_address
+    #   parse_for_start_address
+    #   geocode(@found_start_address, "start")
+    # else
       parse_for_start_and_end_address
       geocode(@found_start_address, "start")
       geocode(@found_end_address, "end")
-    end
+    # end
 
     if @ride.start_address = @start_address
       @ride.save
@@ -43,23 +43,26 @@ class MessageParser
       @ride.save
     end
 
-    # réponses en fonction de la situation
-    if @ride.start_address && @ride.end_address
-      @request.wait_message = false
-      @answer_body_message = "Un Uber arrive au #{@start_address_nice} pour le #{@end_address_nice}"
+    @answer_body_message = UberService.new(@ride).estimate_price
 
-    elsif @ride.start_address
-      @request.wait_message = false
-      @answer_body_message = "Un Uber arrive au #{@start_address_nice}."
+    # # réponses en fonction de la situation
+    # if @ride.start_address && @ride.end_address
+    #   @request.wait_message = false
+    #   @answer_body_message = "Un Uber arrive au #{@start_address_nice} pour le #{@end_address_nice}"
 
-    elsif @ride.end_address
-      @answer_body_message = "Pourriez-vous renvoyer l'adresse de départ svp ? (L'adresse d'arrivée est #{@end_address_nice}) "
+    # elsif @ride.start_address
+    #   @request.wait_message = false
+    #   @answer_body_message = "Un Uber arrive au #{@start_address_nice}."
 
-    else
-      @answer_body_message = "Pourriez-vous renvoyer une adresse d'arrivée et une addresse de départ svp ?"
+    # elsif @ride.end_address
+    #   @answer_body_message = "Pourriez-vous renvoyer l'adresse de départ svp ? (L'adresse d'arrivée est #{@end_address_nice}) "
 
-    end
+    # else
+    #   @answer_body_message = "Pourriez-vous renvoyer une adresse d'arrivée et une addresse de départ svp ?"
 
+    # end
+
+    @request.wait_message = false
     @request.save
 
     return @answer_body_message
@@ -94,8 +97,6 @@ class MessageParser
     split = @message_body.split(";")
     @found_start_address = split[0]
     @found_end_address = split[1]
-
-    # refactorisation pour le kiff
 
   end
 

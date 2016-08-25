@@ -4,6 +4,7 @@ Rails.application.routes.draw do
 
   post 'messages/sms' => 'messages#receive_sms'
 
+
   resources :users, only: [:index, :show]
 
   devise_for :users
