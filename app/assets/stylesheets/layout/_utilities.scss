@@ -43,6 +43,22 @@
   box-shadow: 0 0 4px 1px rgba(0, 0, 0, 0.3);
 }
 
+.top-space {
+  height: 150px;
+}
+
+.bottom-bar {
+  width: 100%;
+  background-color: white;
+  position: fixed;
+  bottom: 0px;
+  padding: 10px;
+}
+
+.bottom-space {
+  height: 150px;
+}
+
 .fa-arrow-circle-up {
   font-size: 78px;
   padding-top: 30px;
@@ -60,12 +76,6 @@
 .logo {
   height: 100px;
 }
-
-
-
-
-
-
 
 
 // à utiliser si l'on souhaite mettre un effet par la suite
@@ -113,6 +123,7 @@
   position: relative;
   padding-right: 2.2em;
 }
+
 .hvr-icon-up:before {
   content: "\f01b";
   position: absolute;
@@ -122,6 +133,7 @@
   -webkit-transform: translateZ(0);
   transform: translateZ(0);
 }
+
 .hvr-icon-up:hover:before, .hvr-icon-up:focus:before, .hvr-icon-up:active:before {
   -webkit-animation-name: hvr-icon-up;
   animation-name: hvr-icon-up;

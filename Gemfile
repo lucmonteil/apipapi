@@ -17,11 +17,17 @@ gem 'font-awesome-sass'
 gem 'simple_form'
 gem 'autoprefixer-rails'
 
+# OAuth
+gem 'omniauth-uber'
+
 #Twilio
 gem 'twilio-ruby'
 
 #Geocoder
 gem 'geocoder'
+
+#Uber
+gem 'uber-ruby', require: 'uber'
 
 group :development, :test do
   gem 'binding_of_caller'
