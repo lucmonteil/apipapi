@@ -17,15 +17,25 @@ gem 'font-awesome-sass'
 gem 'simple_form'
 gem 'autoprefixer-rails'
 
-#Keyboard
-gem 'virtual_keyboard'
 
+# OAuth
+gem 'omniauth-uber'
 
 #Twilio
 gem 'twilio-ruby'
 
 #Geocoder
 gem 'geocoder'
+
+#Uber
+gem 'uber-ruby', require: 'uber'
+
+#UberOmniauth
+gem 'omniauth-uber'
+
+gem 'RecastAI', '~> 1.1'
+gem 'rb-readline'
+gem 'awesome_print', :require => 'ap'
 
 group :development, :test do
   gem 'binding_of_caller'

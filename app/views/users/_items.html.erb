@@ -1,0 +1,43 @@
+<%= time = "" %>
+<% items.each do |item| %>
+  <% if  item[:created_at].to_s[0..14] != time %>
+  <% time = item[:created_at].to_s[0..14] %>
+  <li class="list-group-item">
+    <%= item[:created_at].to_s[0..10] %>
+  </li>
+  <% end %>
+    <li class="list-group-item">
+      <div >
+        <% if item[:class] == Message %>
+          <% message = item[:instance] %>
+          <div class="flex message">
+            <p>
+              <% if message.sender %>
+                <strong>Utilisateur</strong>
+              <% else %>
+                <strong>ApiPapi</strong>
+              <% end %>
+              <%= message.created_at.to_s[-12..-4] %>
+            </p>
+          </div>
+          <div class="">
+            <p><%= message.body %></p>
+          </div>
+        <% elsif item[:class] == Request %>
+          <% request = item[:instance] %>
+          <div class="flex request">
+            <p>
+              <% if request.service.class == Ride %>
+                <span class="glyphicon glyphicon-road" aria-hidden="true"></span>
+                <% service = "Uber" %>
+              <% else %>
+                <span class="glyphicon glyphicon-glass" aria-hidden="true"></span>
+                <%= service = "service sympa" %>
+              <% end %>
+              <%= " Demande de #{service} à #{request.created_at.to_s[-12..-4]}" %>
+            </p>
+          </div>
+        <% end %>
+      </div>
+    </li>
+<% end %>
