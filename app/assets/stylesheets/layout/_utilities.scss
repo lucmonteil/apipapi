@@ -62,6 +62,7 @@
 .fa-arrow-circle-up {
   font-size: 78px;
   padding-top: 30px;
+  color: $yellow;
 }
 
 #chat {
@@ -70,12 +71,9 @@
 }
 
 #order_content{
-  box-shadow: inset 0px -14px $yellow
+  box-shadow: inset 0px -8px $yellow
 }
 
-.logo {
-  height: 100px;
-}
 
 
 // à utiliser si l'on souhaite mettre un effet par la suite
