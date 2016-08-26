@@ -18,7 +18,7 @@ gem 'simple_form'
 gem 'autoprefixer-rails'
 
 #Keyboard
-gem 'virtual_keyboard'
+
 
 
 #Twilio
