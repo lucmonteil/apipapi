@@ -78,7 +78,7 @@ class MessageParser
   def delivery
     @request.service = Delivery.create(status: "pending") unless @request.service
     @request.save
-    @reply = Deliveryonversation.new(@request, @parsed_message).answer
+    @reply = DeliveryConversation.new(@request, @parsed_message).answer
   end
 
   private
