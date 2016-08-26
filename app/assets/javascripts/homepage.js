@@ -8,7 +8,4 @@
 // }
 // setInterval(changeText, 1200);
 
-$(document).on('turbolinks:load', function() {
-  $()
-});
 
