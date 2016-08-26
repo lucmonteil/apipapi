@@ -44,7 +44,7 @@ class MessageParser
     elsif @intention == "joke"
       @reply = "J'espère que c'est une blague..."
     else
-      #réponse par défaut avant de bien comprendre recastAI
+      #réponse par défaut avant de bien comprendre les intentions dans recastAI
       ride
     end
 
