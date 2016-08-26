@@ -1,4 +1,5 @@
 class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
+
   def uber
     user = User.find_for_uber_oauth(request.env['omniauth.auth'])
 

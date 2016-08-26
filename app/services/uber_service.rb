@@ -16,6 +16,8 @@ class UberService
   end
 
   def price_estimates
+    # TODO gérer les erreurs de type :
+    # 'Distance between two points exceeds 100 miles'
     @client.price_estimations(
       start_latitude: @ride.start_address.latitude,
       start_longitude: @ride.start_address.longitude,

@@ -4,9 +4,8 @@ class User < ApplicationRecord
   has_many :rides, through: :requests
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
-  devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :trackable, :validatable
-
+  devise :database_authenticatable, :registerable
+  devise :recoverable, :rememberable, :trackable, :validatable
   devise :omniauthable, omniauth_providers: [:uber]
 
   def self.find_for_uber_oauth(auth)
@@ -26,6 +25,7 @@ class User < ApplicationRecord
       user.password = Devise.friendly_token[0,20]  # Fake password for validation
       user.save
     end
+
     return user
   end
 end

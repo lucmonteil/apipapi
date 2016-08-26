@@ -1,110 +1,94 @@
 class MessageParser
 
   def initialize(message_body, user)
-    @message_body = message_body
+    @message = message_body
     @user = user
   end
 
-  def point_to_service
-    if @user.requests.empty? || @user.requests.last.wait_message
-    # check si c'est la première demande du user
-      create_request
-      # si la request est pour une ride on crée la ride
-      create_ride
-      @request.service = @ride
-    else
-    # check si la dernière request attend une reponse
-      @request = @user.requests.last
-      # si la request est pour une ride
-      @ride = @request.service
+  def request_handler
+    # check si c'est la première request du user
+    if @user.requests.empty?
+      new_request
+      return parse_point_to_service_and_answer
     end
 
-    # si la request est pour une ride
-    return conversation_ride
+    @request = @user.requests.last
+
+    # on regarde le temps entre la dernière requête et maintenant
+    time_out = (((Time.now) - @request.updated_at)/60 >= 10)
+
+    # check si la dernière request est close ou si ça fait trop longtemps
+    if !@request.wait_message || time_out
+      @request.update(wait_message: false)
+      @request = new_request
+    end
+
+    return parse_point_to_service_and_answer
   end
 
-  def conversation_ride
-    # TODO bug quand on trouve deux addresses
-    # le service a été rendu ou qu'un temps X c'est passé depuis le dernier sms
-    # if @ride.end_address
-    #   parse_for_start_address
-    #   geocode(@found_start_address, "start")
-    # else
-      parse_for_start_and_end_address
-      geocode(@found_start_address, "start")
-      geocode(@found_end_address, "end")
-    # end
+  def parse_point_to_service_and_answer
 
-    if @ride.start_address = @start_address
-      @ride.save
+    if @message.downcase == "oui"
+      if @request.service
+        @request.update(wait_message: false)
+        return "C'est parfait. Nous nous occupons de votre commande"
+      else
+        @request.update(wait_message: false)
+        return "Cette attitude positive n'est pas pour me déplaire. "\
+               "Comment puis-je vous aider ?"
+      end
     end
 
-    if @ride.end_address = @end_address
-      @ride.save
+    if @message.downcase == "annuler"
+      if @request.service
+        @request.update(wait_message: false)
+        return "Je suis confus. Voudriez-vous reformuler votre demande svp ? "\
+               "dans tous les cas, merci pour votre confiance."
+      else
+        @request.update(wait_message: false)
+        return "Je me suis emmelé les pinceaux. Pourriez-vous me dire "\
+               "comment je peux vous venir en aide ?"
+      end
+    end
+    #parsing du message
+    @parsed_message = message_parse
+    @intention = @parsed_message.intent
+
+    if @intention == "ride" # <--- TODO trouver le bon nom
+      @reply = ride
+    elsif @intention == "delivery" # <--- Fake service pour exemple
+      @reply = delivery
+    elsif @intention == "joke"
+      @reply = "J'espère que c'est une blague..."
+    else
+      #réponse par défaut avant de bien comprendre les intentions dans recastAI
+      ride
     end
 
-    @price = UberService.new(@ride).price_estimates
-    @time = UberService.new(@ride).time_estimates
+    return @reply
+  end
 
-    @answer_body_message = "Le prix de la course de #{@ride.start_address.query} à #{@ride.end_address.query} est de #{@price} (il arrive dans #{@time/60} minutes)"
-
-    # # réponses en fonction de la situation
-    # if @ride.start_address && @ride.end_address
-    #   @request.wait_message = false
-    #   @answer_body_message = "Un Uber arrive au #{@start_address_nice} pour le #{@end_address_nice}"
-
-    # elsif @ride.start_address
-    #   @request.wait_message = false
-    #   @answer_body_message = "Un Uber arrive au #{@start_address_nice}."
-
-    # elsif @ride.end_address
-    #   @answer_body_message = "Pourriez-vous renvoyer l'adresse de départ svp ? (L'adresse d'arrivée est #{@end_address_nice}) "
-
-    # else
-    #   @answer_body_message = "Pourriez-vous renvoyer une adresse d'arrivée et une addresse de départ svp ?"
-
-    # end
-
-    @request.wait_message = false
+  # liste des services
+  def ride
+    @request.service = Ride.create(status: "pending") unless @request.service
     @request.save
+    @reply = RideConversation.new(@request, @parsed_message).answer
+  end
 
-    return @answer_body_message
+  def delivery
+    @request.service = Delivery.create(status: "pending") unless @request.service
+    @request.save
+    @reply = DeliveryConversation.new(@request, @parsed_message).answer
   end
 
   private
 
-  # création du "service ride"
-  def create_request
-    @request = Request.create(wait_message: true, user: @user)
+  def message_parse
+    RecastAI::Client.new(ENV["RECAST_TOKEN"], "fr").text_request(@message)
   end
 
-  # création du "service ride", à balancer dans Uber_service
-  def create_ride
-    @ride = Ride.create(status: "pending")
-  end
-
-  def geocode(searched_address, prefix)
-    address = Address.new(query: searched_address)
-    address.validate # triggers geocoder
-    if address.save
-      lat = instance_variable_set("@#{prefix}_latitude", address.latitude)
-      lng = instance_variable_set("@#{prefix}_longitude", address.longitude)
-      instance_variable_set("@#{prefix}_address_nice", Geocoder.search("#{lat},#{lng}")[0].formatted_address)
-      instance_variable_set("@#{prefix}_address", address)
-    end
-  end
-
-  # ces methodes seront refaites dans RECAST.AI
-  def parse_for_start_and_end_address
-    # ici la pire AI du monde !
-    split = @message_body.split(";")
-    @found_start_address = split[0]
-    @found_end_address = split[1]
-
-  end
-
-  def parse_for_start_address
-    # ici même pas de split, on prend toute la string
-    @found_start_address = @message_body
+  # création d'un request avec un service
+  def new_request
+    @request = Request.new(wait_message: true, user: @user)
   end
 end
