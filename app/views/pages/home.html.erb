@@ -1,53 +1,57 @@
-<!-- <div class="banner" style="background-image: linear-gradient(-225deg, rgba(0,101,168,0.6) 0%, rgba(0,36,61,0.6) 50%), url(<%= image_path 'old_waiting.jpeg' %>;)">
-  <div class="row">
-    <div class="col-xs-12 banner-content">
-      <h1>Happy Papi</h1>
-      <p>Stop waiting</p>
-      <p>Order a <span>Driver</span> in 2 minutes.</p>
-    </div>
-    <div class="col-xs-12 banner-content">
-      <form class="form-inline">
-        <div class="form-group">
-          <label class="sr-only" for="exampleInputEmail3">Email address</label>
-          <input type="email" class="form-control" id="exampleInputEmail3" placeholder="I would like...">
-        </div>
-        <a href="#" class="btn-medium">Request</a></form>
-    </div>
-  </div>
-</div> -->
-
-
-<div class="wrapper-blue">
-  <div class="container bg-blue">
+  <div class="wrapper-blue">
+  <div class="container">
     <div class="row">
-      <div class="col-xs-12 padded banner-home">
+      <div class="col-xs-12 padded banner-description">
         <h1>
           <%= image_tag "logo_grey.png", class: "logo" %> Happy Papi
         </h1>
-        <p>Order a
-          <span id="order_content">Driver</span>
-        </p>
-        <p> easily, <strong>without a smartphone</strong>.
-        </p>
       </div>
    </div>
   </div>
-  <div class="container bg-blue">
-    <div class="row">
-      <div class="col-xs-8 col-xs-offset-2 padded ">
-        <div>
-          <form class="form-inline">
-            <div class="form-group banner-demo-search">
-              <input type="email" class="form-control text-center" id="chat" placeholder="I would like...">
-            </div>
-          </form>
-        </div>
-        <div class="banner-demo-explanation">
-          <i class="fa fa-arrow-circle-up" aria-hidden="true"></i>
-          <p><strong>Type something or send a sms to the 07 56 79 64 81</strong>  </p>
-        </div>
+  <div class="container flex">
+    <div class="col-xs-12 col-sm-4 padded banner-description">
+      <div>
+      <p>Order a <span id="order_content">Driver</span></p>
+      <p> easily, <strong>without any smartphone</strong></p>
+      </div>
+    </div>
+    <div class="col-xs-12 col-sm-2">
+      <i class="fa fa-caret-right" aria-hidden="true"></i>
+    </div>
+    <div class="col-xs-12 col-sm-6 padded banner-phone ">
+      <div class="">
+        <p>Send us a <strong >sms</strong>, or give us a <strong>call</strong>
+        <br>
+        <strong >07 56 79 64 81</strong>
+        </p>
       </div>
     </div>
   </div>
+  <input id="num" class="alignRight" type="text">
+</div>
 
 
+
+<!--
+<div id="container-keyboard">
+    <textarea id="write" rows="4" cols="3"></textarea>
+    <ul id="keyboard">
+        <li class="symbol"><span class="off">1</span>
+        <li class="symbol"><span class="off">2</span>
+        <li class="symbol lastitem"><span class="off">3</span>
+        <li class="symbol"><span class="off">4</span>
+        <li class="symbol"><span class="off">5</span>
+        <li class="symbol lastitem"><span class="off">6</span>
+        <li class="symbol"><span class="off">7</span>
+        <li class="symbol"><span class="off">8</span>
+        <li class="symbol lastitem"><span class="off">9</span>
+        <li class="symbol"><span class="off">0</span>
+        <li class="symbol"><span class="off">-</span>
+        <li class="symbol"><span class="off">+</span>
+        <li class="delete lastitem">delete</li>
+    </ul>
+</div>
+
+<script type="text/javascript" src="js/keyboard.js"></script>
+
+ -->

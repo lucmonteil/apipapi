@@ -43,10 +43,13 @@
   box-shadow: 0 0 4px 1px rgba(0, 0, 0, 0.3);
 }
 
-.fa-arrow-circle-up {
-  font-size: 78px;
+.fa-caret-right {
+  font-size: 55px;
   padding-top: 30px;
+  color: $yellow;
 }
+
+
 
 #chat {
   margin-bottom: 15px;
@@ -55,10 +58,6 @@
 
 #order_content{
   box-shadow: inset 0px -14px $yellow
-}
-
-.logo {
-  height: 100px;
 }
 
 
