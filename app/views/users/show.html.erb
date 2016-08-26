@@ -1,9 +1,13 @@
 <body onload="scrollTo(0,document.body.scrollHeight)">
 
 <div class="top-space"></div>
-  <%= render 'messages', messages: @messages %>
-<ul class="list-group" id="messages">
 
+<ul class="list-group" id="messages">
+  <li class="list-group-item" id="user-li">
+    <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+    <%= "Nouvel utilisateur crée (#{@user.phone_number}) à #{@user.created_at}" %>
+  </li>
+  <%= render 'items', items: @items %>
 </ul>
 
 <div class="bottom-space"></div>
