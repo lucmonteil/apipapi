@@ -217,7 +217,7 @@ DEPENDENCIES
   spring-watcher-listen (~> 2.0.0)
   twilio-ruby
   uglifier
-  virtual_keyboard
+
 
 RUBY VERSION
    ruby 2.3.1p112
