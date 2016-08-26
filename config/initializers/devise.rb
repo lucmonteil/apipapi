@@ -275,4 +275,9 @@ Devise.setup do |config|
   # When using OmniAuth, Devise cannot automatically set OmniAuth path,
   # so you need to do it manually. For the users scope, it would be:
   # config.omniauth_path_prefix = '/my_engine/users/auth'
+
+  # Omni-auth UBER
+  config.omniauth :uber, ENV['UBER_CLIENT_ID'], ENV['UBER_CLIENT_SECRET'],
+    scope: 'request profile history'
+
 end
