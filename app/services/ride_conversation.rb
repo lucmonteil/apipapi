@@ -10,19 +10,27 @@ class RideConversation
 
   def answer
 
+    error = "[ error/ride_conversation in answer ]"
+
+
     @ride.save if @ride.end_address = @end_address
+
 
     if @ride.start_address = @start_address
       @ride.save
       @time = UberService.new(@ride).time_estimates
+      # check for errors methods?
+      return @answer = error + "[#1] on Time estimation" unless @time
+      return @answer = error + "[#1] on Time estimation" unless @time.is_a?(Integer)
+      return @answer = error + "[#1] on Time estimation" unless @time.is_a?(Integer)
+      return @answer = error + @time + "[#1] on Time estimation" if @time.is_a?(String)
     end
-
 
     if @start_address && @end_address
       @price = UberService.new(@ride).price_estimates
       @answer = "Le prix de la course de #{@start_address_nice } " \
                 "à #{@end_address_nice} est de #{@price} (une voiture peut être là " \
-                "dans #{@time/60} minutes). Envoyez OUI pour commander " \
+                "dans #{@time/60} minutes). Envoyez OUI pour commander"
     elsif @start_address
       @answer = "Une voiture peut venir vous chercher au #{@start_address_nice} " \
                 "dans #{@time/60} minutes. Pourriez-vous me renvoyer votre adresse " \
@@ -31,11 +39,8 @@ class RideConversation
     elsif @end_address
       @answer = "Je n'ai pas compris votre adresse de départ. Pourriez-vous " \
                 "me la renvoyer ? "
-    elsif
-      @answer = "Je n'ai pas compris... pourriez-vous renvoyer " \
-                "vos addresses de départ et d'arrivée ? "
     else
-
+      @answer = error
     end
 
     return @answer
