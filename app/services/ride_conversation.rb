@@ -73,4 +73,10 @@ class RideConversation
     # check if time is not an integer
     @errors << error + "[#1] on Time estimation - Time = " + "#{@time.class}" unless @time.is_a?(Integer)
   end
+
+  at_exit do
+    if $!
+      @answer = "Woops, something went wrong."
+    end
+  end
 end
