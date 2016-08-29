@@ -18,13 +18,19 @@ class UberService
   def price_estimates
     # TODO gérer les erreurs de type :
     # 'Distance between two points exceeds 100 miles'
-    car = @client.price_estimations(
-      start_latitude: @ride.start_address.latitude,
-      start_longitude: @ride.start_address.longitude,
-      end_latitude: @ride.end_address.latitude,
-      end_longitude: @ride.end_address.longitude
-      ).detect {|e| e.display_name == "uberX"}
-    car[:estimate]
+    #
+    begin
+      estimation = @client.price_estimations(
+        start_latitude: @ride.start_address.latitude,
+        start_longitude: @ride.start_address.longitude,
+        end_latitude: @ride.end_address.latitude,
+        end_longitude: @ride.end_address.longitude
+        )
+      car = estimation.detect {|e| e.display_name == "uberX"}
+      car[:estimate]
+    rescue Uber::Error::UnprocessableEntity => error
+      error.message
+    end
   end
 
   def time_estimates
