@@ -18,19 +18,17 @@ class RideConversation
 
     if @ride.start_address = @start_address
       @ride.save
-      @time = UberService.new(@ride).time_estimate
-
-
+      @time = UberService.new(@ride).time_estimates / 60
     end
 
     if @start_address && @end_address
       @price = UberService.new(@ride).price_estimates
       @answer = "Le prix de la course de #{@start_address_nice } " \
                 "à #{@end_address_nice} est de #{@price} (une voiture peut être là " \
-                "dans #{@time/60} minutes). Envoyez OUI pour commander"
+                "dans #{@time} minutes). Envoyez OUI pour commander"
     elsif @start_address
       @answer = "Une voiture peut venir vous chercher au #{@start_address_nice} " \
-                "dans #{@time/60} minutes. Pourriez-vous me renvoyer votre adresse " \
+                "dans #{@time} minutes. Pourriez-vous me renvoyer votre adresse " \
                 "d'arrivée pour que je puisse vous proposer un prix ? Envoyer ANNULER " \
                 "si j'ai mal compris."
     elsif @end_address
@@ -65,18 +63,16 @@ class RideConversation
     end
   end
 
-  def validate_time
-    @errors = []
-    @errors << @answer = error + " on Time estimation - Time var is not defined" if (defined? @time).nil?
-    #if time is a string, return message with string
-    @errors <<  @answer = errors + "[#1] on Time estimation - Time is a string - Time = " + @time if @time.is_a?(String)
+   def validate_time
+     @answer = error + " on Time estimation - Time var is not defined" if (defined? @time).nil?
+     @answer = errors + "[#1] on Time estimation - Time is a string - Time = " + @time if @time.is_a?(String)
     # check if time is not an integer
-    @errors << error + "[#1] on Time estimation - Time = " + "#{@time.class}" unless @time.is_a?(Integer)
+     @answer = error + "[#1] on Time estimation - Time = " + "#{@time.class}" unless @time.is_a?(Integer)
   end
 
   at_exit do
     if $!
-      @answer = "Woops, something went wrong."
+      @answer = "oops"
     end
   end
 end
