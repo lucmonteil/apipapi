@@ -62,17 +62,4 @@ class RideConversation
       instance_variable_set("@#{prefix}_address", address)
     end
   end
-
-   def validate_time
-     @answer = error + " on Time estimation - Time var is not defined" if (defined? @time).nil?
-     @answer = errors + "[#1] on Time estimation - Time is a string - Time = " + @time if @time.is_a?(String)
-    # check if time is not an integer
-     @answer = error + "[#1] on Time estimation - Time = " + "#{@time.class}" unless @time.is_a?(Integer)
-  end
-
-  at_exit do
-    if $!
-      @answer = "oops"
-    end
-  end
 end
