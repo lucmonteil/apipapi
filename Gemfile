@@ -29,9 +29,6 @@ gem 'geocoder'
 #Uber
 gem 'uber-ruby', require: 'uber'
 
-#UberOmniauth
-gem 'omniauth-uber'
-
 gem 'RecastAI', '~> 1.1'
 gem 'rb-readline'
 gem 'awesome_print', :require => 'ap'
