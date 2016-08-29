@@ -42,6 +42,10 @@ class UberService
     start_latitude: @ride.start_address.latitude,
     start_longitude: @ride.start_address.longitude
     ).detect {|e| e.display_name == "uberX"}
-    car[:estimate]
+    if car
+      car[:estimate]
+    else
+      return "no_uber"
+    end
   end
 end
