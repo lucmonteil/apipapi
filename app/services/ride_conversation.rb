@@ -46,7 +46,8 @@ class RideConversation
       else
         @start_address = @ride.start_address
       end
-      @time = UberService.new(@ride).time_estimates / 60
+      @time = UberService.new(@ride).time_estimates
+      @time = @time / 60 if @time.class == Integer
       @start_address_nice = Geocoder.search("#{@start_address.latitude},#{@start_address.longitude}")[0].formatted_address
     end
 
