@@ -1,3 +1,5 @@
+require "recastai"
+
 class MessageParser
 
   def initialize(message_body, user)

@@ -13,7 +13,6 @@ class RideConversation
     error =     "Je n'ai pas compris votre demande. Pourriez-vous envoyer " \
                 "votre demande sous la forme : Je suis au [Addresse de départ], " \
                 "je vais au [Addresse d'arrivée]"
-
     if @price
       if @price == "distance_exceeded"
         @answer = "Désolé, la distance entre #{@start_address_nice } " \
@@ -60,7 +59,7 @@ class RideConversation
         @start_address = @ride.start_address
       end
       @time = UberService.new(@ride).time_estimates
-      @time = @time / 60 if @time.class == Integer
+      @time = @time / 60 if @time.class == Fixnum
       @start_address_nice = Geocoder.search("#{@start_address.latitude},#{@start_address.longitude}")[0].formatted_address
     end
 
