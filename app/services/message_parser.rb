@@ -42,8 +42,10 @@ class MessageParser
       @answer = ride
     elsif @intention == "information" # <--- Set un robot
       @answer = delivery
+      @request.update(wait_message: false)
     elsif @intention == "greetings"# <--- Set un robot
       @answer = "Bonjour#{ @user.first_name} !"
+      @request.update(wait_message: false)
     else
       ride
     end
