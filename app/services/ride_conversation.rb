@@ -18,12 +18,9 @@ class RideConversation
 
     if @ride.start_address = @start_address
       @ride.save
-      @time = UberService.new(@ride).time_estimates
-      # check for errors methods?
-      return @answer = error + "[#1] on Time estimation" unless @time
-      return @answer = error + "[#1] on Time estimation" unless @time.is_a?(Integer)
-      return @answer = error + "[#1] on Time estimation" unless @time.is_a?(Integer)
-      return @answer = error + @time + "[#1] on Time estimation" if @time.is_a?(String)
+      @time = UberService.new(@ride).time_estimate
+
+
     end
 
     if @start_address && @end_address
@@ -66,5 +63,14 @@ class RideConversation
       instance_variable_set("@#{prefix}_address_nice", Geocoder.search("#{lat},#{lng}")[0].formatted_address)
       instance_variable_set("@#{prefix}_address", address)
     end
+  end
+
+  def validate_time
+    @errors = []
+    @errors << @answer = error + " on Time estimation - Time var is not defined" if (defined? @time).nil?
+    #if time is a string, return message with string
+    @errors <<  @answer = errors + "[#1] on Time estimation - Time is a string - Time = " + @time if @time.is_a?(String)
+    # check if time is not an integer
+    @errors << error + "[#1] on Time estimation - Time = " + "#{@time.class}" unless @time.is_a?(Integer)
   end
 end
