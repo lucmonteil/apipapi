@@ -1,0 +1,26 @@
+<%= time = "" %>
+<% messages.each do |message| %>
+  <% if  message.created_at.to_s[0..14] != time %>
+  <% time = message.created_at.to_s[0..14] %>
+  <li class="list-group-item">
+    <%= message.created_at.to_s[0..10] %>
+  </li>
+  <% end %>
+    <li class="list-group-item">
+      <div >
+        <div class="flex">
+          <p>
+            <% if message.sender %>
+              <strong>Utilisateur</strong>
+            <% else %>
+              <strong>ApiPapi</strong>
+            <% end %>
+            <%= message.created_at.to_s[-12..-4] %>
+          </p>
+        </div>
+        <div class="">
+          <p><%= message.body %></p>
+        </div>
+      </div>
+    </li>
+<% end %>
