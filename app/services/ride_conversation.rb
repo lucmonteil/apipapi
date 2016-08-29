@@ -10,21 +10,13 @@ class RideConversation
 
   def answer
 
-    error = "[ error/ride_conversation in answer ]"
+    error =     "Je n'ai pas compris votre demande. Pourriez-vous envoyer " \
+                "votre demande sous la forme : Je suis au [Addresse de départ], " \
+                "je vais au [Addresse d'arrivée]"
 
-
-    @ride.save if @ride.end_address = @end_address
-
-
-    if @ride.start_address = @start_address
-      @ride.save
-      @time = UberService.new(@ride).time_estimates / 60 if @time.class == Integer
-    end
-
-    if @start_address && @end_address
-      @price = UberService.new(@ride).price_estimates
+    if @price
       if @price == "distance_exceeded"
-        @answer = "Désolé, La distance entre #{@start_address_nice } " \
+        @answer = "Désolé, la distance entre #{@start_address_nice } " \
                 "à #{@end_address_nice} est supérieure à 100 kilomètres. Veuillez réessayer !"
       elsif @price == "no_uber"
         @answer = "Désolé, nous ne trouvons pas de Uber entre #{@start_address_nice } " \
@@ -34,15 +26,14 @@ class RideConversation
                 "à #{@end_address_nice} est de #{@price} (une voiture peut être là " \
                 "dans #{@time} minutes). Envoyez OUI pour commander"
       end
-
-    elsif @start_address
-      if @time.class != Integer
-        @answer = "Désolé, la zone autour de #{@start_address_nice} n'est pas encore couverte !"
-      else
+    elsif @time
+      if @time.class == Integer
         @answer = "Une voiture peut venir vous chercher au #{@start_address_nice} " \
-                "dans #{@time} minutes. Pourriez-vous me renvoyer votre adresse " \
-                "d'arrivée pour que je puisse vous proposer un prix ? Envoyer ANNULER " \
-                "si j'ai mal compris."
+                  "dans #{@time} minutes. Pourriez-vous me renvoyer votre adresse " \
+                  "d'arrivée pour que je puisse vous proposer un prix ? Envoyer ANNULER " \
+                  "si j'ai mal compris."
+      else
+        @answer = "Désolé, la zone autour de #{@start_address_nice} n'est pas encore couverte !"
       end
     elsif @end_address
       @answer = "Je n'ai pas compris votre adresse de départ. Pourriez-vous " \
@@ -56,23 +47,43 @@ class RideConversation
 
   private
 
-  # TODO trouver les bonnes clefs (indice ce n'est pas :from et :to)
+  # TODO trouver les bonnes clefs entities (indice ce n'est pas :from et :to)
   def set_variables
-    address = @found_params.entities.detect {|e| e.name == "address"}
-    geocode(address.value, "start") if address
-    destination = @found_params.entities.detect {|e| e.name == "destination"}
-    geocode(destination.value, "end") if destination
+
+    if address = @found_params.entities.detect {|entity| entity.name == "address"} || @ride.start_address
+      if @ride.start_address.nil?
+        geocode(address.value, "start") if address
+        @ride.start_address = @start_address
+        @ride.save
+      else
+        @start_address = @ride.start_address
+      end
+      @time = UberService.new(@ride).time_estimates
+      @time = @time / 60 if @time.class == Integer
+      @start_address_nice = Geocoder.search("#{@start_address.latitude},#{@start_address.longitude}")[0].formatted_address
+    end
+
+    if destination = @found_params.entities.detect {|entity| entity.name == "destination"} || @ride.end_address
+      if @ride.end_address.nil?
+        geocode(destination.value, "end") if destination
+        @ride.end_address = @end_address
+        @ride.save
+      else
+        @end_address = @ride.end_address
+      end
+      @end_address_nice = Geocoder.search("#{@end_address.latitude},#{@end_address.longitude}")[0].formatted_address
+    end
+
+    unless @ride.end_address.nil? || @ride.start_address.nil?
+      @price = UberService.new(@ride).price_estimates
+    end
   end
 
   # on utilise pas les lat et lng de Recast, ça fait trop de conditions
   def geocode(searched_address, prefix)
     address = Address.new(query: searched_address)
     address.validate # triggers geocoder
-    if address.save
-      lat = instance_variable_set("@#{prefix}_latitude", address.latitude)
-      lng = instance_variable_set("@#{prefix}_longitude", address.longitude)
-      instance_variable_set("@#{prefix}_address_nice", Geocoder.search("#{lat},#{lng}")[0].formatted_address)
-      instance_variable_set("@#{prefix}_address", address)
-    end
+    address.save
+    instance_variable_set("@#{prefix}_address", address)
   end
 end
