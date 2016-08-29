@@ -8,7 +8,7 @@ class RideConversation
     set_variables
 
     @start_address_nice = Geocoder.search("#{@end_address.latitude},#{@end_address.longitude}")[0].formatted_address
-    @start_address_nice = Geocoder.search("#{@start_address.latitude},#{@start_address.longitude}")[0].formatted_address
+    @end_address_nice = Geocoder.search("#{@start_address.latitude},#{@start_address.longitude}")[0].formatted_address
   end
 
   def answer
@@ -18,7 +18,6 @@ class RideConversation
 
     @ride.save if @ride.end_address = @end_address
 
-
     if @ride.start_address = @start_address
       @ride.save
       @time = UberService.new(@ride).time_estimates / 60
@@ -26,7 +25,7 @@ class RideConversation
 
     if @start_address && @end_address
       @price = UberService.new(@ride).price_estimates
-      @answer = "Le prix de la course de #{@start_address_nice } " \
+      @answer = "Le prix de la course de #{@start_address_nice} " \
                 "à #{@end_address_nice} est de #{@price} (une voiture peut être là " \
                 "dans #{@time} minutes). Envoyez OUI pour commander"
     elsif @start_address

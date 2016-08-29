@@ -42,8 +42,8 @@ class MessageParser
     if @message.downcase == "annuler"
       if @request.service
         @request.update(wait_message: false)
-        return "Je suis confus. Voudriez-vous reformuler votre demande svp ? "\
-               "dans tous les cas, merci pour votre confiance."
+        return "Votre commande a été annulée. Renvoyer une demande quand vous "\
+               "voulez : je reste à votre service"
       else
         @request.update(wait_message: false)
         return "Je me suis emmelé les pinceaux. Pourriez-vous me dire "\
