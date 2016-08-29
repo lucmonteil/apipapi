@@ -33,6 +33,6 @@ class UsersController < ApplicationController
   end
 
   def index
-    @users = User.order("created_at DESC")
+    @users = User.where.not('phone_number' => nil).order("created_at DESC")
   end
 end
