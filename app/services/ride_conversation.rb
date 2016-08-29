@@ -13,6 +13,7 @@ class RideConversation
     error =     "Je n'ai pas compris votre demande. Pourriez-vous envoyer " \
                 "votre demande sous la forme : Je suis au [Adresse de départ], " \
                 "je vais au [Adresse d'arrivée]"
+
     if @price
       if @price == "distance_exceeded"
         @answer = "Désolé, la distance entre #{@start_address_nice } " \
@@ -27,7 +28,7 @@ class RideConversation
       end
       @request.update(wait_message: false)
     elsif @time
-      if @time.class == Integer
+      if @time.class == Fixnum
         @answer = "Une voiture peut venir vous chercher au #{@start_address_nice} " \
                   "dans #{@time} minutes. Pourriez-vous me renvoyer votre adresse " \
                   "d'arrivée pour que je puisse vous proposer un prix ? Envoyer ANNULER " \
@@ -50,7 +51,7 @@ class RideConversation
   # TODO trouver les bonnes clefs entities (indice ce n'est pas :from et :to)
   def set_variables
 
-    if address = @found_params.entities.detect {|entity| entity.name == "address"} || @ride.start_address
+    if address = @found_params.entities.detect {|entity| entity.name == "from"} || @ride.start_address
       if @ride.start_address.nil?
         geocode(address.value, "start") if address
         @ride.start_address = @start_address
@@ -63,7 +64,7 @@ class RideConversation
       @start_address_nice = Geocoder.search("#{@start_address.latitude},#{@start_address.longitude}")[0].formatted_address
     end
 
-    if destination = @found_params.entities.detect {|entity| entity.name == "destination"} || @ride.end_address
+    if destination = @found_params.entities.detect {|entity| entity.name == "to"} || @ride.end_address
       if @ride.end_address.nil?
         geocode(destination.value, "end") if destination
         @ride.end_address = @end_address

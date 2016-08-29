@@ -21,8 +21,9 @@ class MessageParser
     if @intention == "accept"
       if @request.service
         if @request.service.start_address && @request.service.end_address
-        @request.update(wait_message: false)
-        return "C'est parfait. Nous nous occupons de votre commande"
+          @request.update(wait_message: false)
+          return "C'est parfait. Nous nous occupons de votre commande"
+        end
       else
         @request.update(wait_message: false)
         return "Comment puis-je vous aider ?"
@@ -34,8 +35,8 @@ class MessageParser
                "voulez : je reste à votre service"
       else
         @request.update(wait_message: false)
-        return "Je me suis emmelé les pinceaux. Pourriez-vous me dire "\
-               "comment puis-je vous venir en aide ?"
+        return "Je me suis emmelé les pinceaux. "\
+               "Comment puis-je vous venir en aide ?"
       end
     end
 
