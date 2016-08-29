@@ -6,6 +6,9 @@ class RideConversation
     @found_params = found_params
 
     set_variables
+
+    @start_address_nice = Geocoder.search("#{@end_address.latitude},#{@end_address.longitude}")[0].formatted_address
+    @start_address_nice = Geocoder.search("#{@start_address.latitude},#{@start_address.longitude}")[0].formatted_address
   end
 
   def answer
@@ -48,12 +51,20 @@ class RideConversation
 
   private
 
-  # TODO trouver les bonnes clefs (indice ce n'est pas :from et :to)
+  # TODO trouver les bonnes clefs entities (indice ce n'est pas :from et :to)
   def set_variables
-    address = @found_params.entities.detect {|e| e.name == "address"}
-    geocode(address.value, "start") if address
-    destination = @found_params.entities.detect {|e| e.name == "destination"}
-    geocode(destination.value, "end") if destination
+    if @ride.start_address.nil?
+      address = @found_params.entities.detect {|entitie| entitie.name == "address"}
+      geocode(address.value, "start") if address
+    else
+      @start_address = @ride.start_address
+    end
+    if @ride.end_address.nil?
+      destination = @found_params.entities.detect {|entitie| entitie.name == "destination"}
+      geocode(destination.value, "end") if destination
+    else
+      @end_address = @ride.end_address
+    end
   end
 
   # on utilise pas les lat et lng de Recast, ça fait trop de conditions
@@ -61,9 +72,8 @@ class RideConversation
     address = Address.new(query: searched_address)
     address.validate # triggers geocoder
     if address.save
-      lat = instance_variable_set("@#{prefix}_latitude", address.latitude)
-      lng = instance_variable_set("@#{prefix}_longitude", address.longitude)
-      instance_variable_set("@#{prefix}_address_nice", Geocoder.search("#{lat},#{lng}")[0].formatted_address)
+      instance_variable_set("@#{prefix}_latitude", address.latitude)
+      instance_variable_set("@#{prefix}_longitude", address.longitude)
       instance_variable_set("@#{prefix}_address", address)
     end
   end
