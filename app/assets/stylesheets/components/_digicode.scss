@@ -1,0 +1,22 @@
+.keyboard-line {
+  display: flex;
+  justify-content: space-around;
+
+  .keyboard-dial {
+    height: 60px;
+    width: 60px;
+    margin: 6px;
+  }
+
+  .keyboard-input {
+    height: 60px;
+    width: 100%;
+    margin: 6px;
+  }
+}
+
+#keyboard {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}

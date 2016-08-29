@@ -3,32 +3,53 @@
   tabindex="0"
   class="form-control"
   role="button"
-  data-trigger="focus"
   data-placement="bottom"
   >
 </a>
 
-<div id="popover-content" class="hidden">
-  <div>
-    <b>Example popover #2</b> - content
+<div id="keyboard" class="hidden keyboard">
+  <div class="keyboard-line">
+    <button class="btn btn-default keyboard-dial" >1</button>
+    <button class="btn btn-default keyboard-dial" >2</button>
+    <button class="btn btn-default keyboard-dial" >3</button>
   </div>
-</div>
-
-<div id="popover-title" class="hidden">
-  <b>Example popover #2</b> - title
+  <div class="keyboard-line">
+    <button class="btn btn-default keyboard-dial" >4</button>
+    <button class="btn btn-default keyboard-dial" >5</button>
+    <button class="btn btn-default keyboard-dial" >6</button>
+  </div>
+  <div class="keyboard-line">
+    <button class="btn btn-default keyboard-dial" >7</button>
+    <button class="btn btn-default keyboard-dial" >8</button>
+    <button class="btn btn-default keyboard-dial" >9</button>
+  </div>
+  <div class="keyboard-line">
+    <button class="btn btn-default keyboard-dial" >*</button>
+    <button class="btn btn-default keyboard-dial" >0</button>
+    <button class="btn btn-default keyboard-dial" >#</button>
+  </div>
+  <div class="keyboard-line">
+    <button class="btn btn-primary keyboard-input" type="submit">Contactez-moi</button>
+  </div>
 </div>
 
 <% content_for(:after_js) do %>
   <script>
+    $(document.body).on('shown.bs.popover', function () {
+      $('.keyboard-dial').click( function ( event ) {
+        event.preventDefault();
+        var number_dialed = $(this).text();
+        $( "#popover" ).val( function( index, val ) {
+          return val + number_dialed;
+        });
+      });
+    });
     $(window).load(function(){
       $("#popover").popover({
         html : true,
         content: function() {
-          return $("#popover-content").html();
+          return $("#keyboard").html();
         },
-        title: function() {
-          return $("#popover-title").html();
-        }
       });
     });
   </script>

@@ -11,8 +11,8 @@ class RideConversation
   def answer
 
     error =     "Je n'ai pas compris votre demande. Pourriez-vous envoyer " \
-                "votre demande sous la forme : Je suis au [Addresse de départ], " \
-                "je vais au [Addresse d'arrivée]"
+                "votre demande sous la forme : Je suis au [Adresse de départ], " \
+                "je vais au [Adresse d'arrivée]"
     if @price
       if @price == "distance_exceeded"
         @answer = "Désolé, la distance entre #{@start_address_nice } " \
