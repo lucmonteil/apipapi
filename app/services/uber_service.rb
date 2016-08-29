@@ -27,7 +27,11 @@ class UberService
         end_longitude: @ride.end_address.longitude
         )
       car = estimation.detect {|e| e.display_name == "uberX"}
-      car[:estimate]
+      if car
+        car[:estimate]
+      else
+        return "no_uber"
+      end
     rescue Uber::Error::UnprocessableEntity => error
       error.message
     end
@@ -35,9 +39,9 @@ class UberService
 
   def time_estimates
     car = @client.time_estimations(
-      start_latitude: @ride.start_address.latitude,
-      start_longitude: @ride.start_address.longitude
-      ).detect {|e| e.display_name == "uberX"}
+    start_latitude: @ride.start_address.latitude,
+    start_longitude: @ride.start_address.longitude
+    ).detect {|e| e.display_name == "uberX"}
     car[:estimate]
   end
 end
