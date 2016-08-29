@@ -26,6 +26,7 @@ class RideConversation
                 "à #{@end_address_nice} est de #{@price} (une voiture peut être là " \
                 "dans #{@time} minutes). Envoyez OUI pour commander"
       end
+      @request.update(wait_message: false)
     elsif @time
       if @time.class == Integer
         @answer = "Une voiture peut venir vous chercher au #{@start_address_nice} " \

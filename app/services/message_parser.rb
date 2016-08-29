@@ -3,30 +3,16 @@ class MessageParser
   def initialize(message_body, user)
     @message = message_body
     @user = user
+
+    set_request
+
+    @parsed_message = message_parse
+    @intention = @parsed_message.intent
+
+    parse_and_answer
   end
 
-  def request_handler
-    # check si c'est la première request du user
-    if @user.requests.empty?
-      new_request
-      return parse_point_to_service_and_answer
-    end
-
-    @request = @user.requests.last
-
-    # on regarde le temps entre la dernière requête et maintenant
-    time_out = (((Time.now) - @request.updated_at)/60 >= 10)
-
-    # check si la dernière request est close ou si ça fait trop longtemps
-    if !@request.wait_message || time_out
-      @request.update(wait_message: false)
-      @request = new_request
-    end
-
-    return parse_point_to_service_and_answer
-  end
-
-  def parse_point_to_service_and_answer
+  def parse_and_answer
 
     if @message.downcase == "oui"
       if @request.service
@@ -34,8 +20,7 @@ class MessageParser
         return "C'est parfait. Nous nous occupons de votre commande"
       else
         @request.update(wait_message: false)
-        return "Cette attitude positive n'est pas pour me déplaire. "\
-               "Comment puis-je vous aider ?"
+        return "Comment puis-je vous aider ?"
       end
     end
 
@@ -50,45 +35,55 @@ class MessageParser
                "comment je peux vous venir en aide ?"
       end
     end
-    #parsing du message
-    @parsed_message = message_parse
-    @intention = @parsed_message.intent
 
-    if @intention == "ride" # <--- TODO trouver le bon nom
-      @reply = ride
-    elsif @intention == "delivery" # <--- Fake service pour exemple
-      @reply = delivery
-    elsif @intention == "joke"
-      @reply = "J'espère que c'est une blague..."
+    if @intention == "ride" # <--- Set un robot
+      @answer = ride
+    elsif @intention == "information" # <--- Set un robot
+      @answer = delivery
+    elsif @intention == "greetings"# <--- Set un robot
+      @answer = "Bonjour#{ @user.first_name} !"
     else
-      #réponse par défaut avant de bien comprendre les intentions dans recastAI
       ride
     end
 
-    return @reply
+    return @answer
   end
+
+  private
 
   # liste des services
   def ride
     @request.service = Ride.create(status: "pending") unless @request.service
     @request.save
-    @reply = RideConversation.new(@request, @parsed_message).answer
+    @answer = RideConversation.new(@request, @parsed_message).answer
   end
 
   def delivery
     @request.service = Delivery.create(status: "pending") unless @request.service
     @request.save
-    @reply = DeliveryConversation.new(@request, @parsed_message).answer
+    @answer = DeliveryConversation.new(@request, @parsed_message).answer
   end
 
-  private
+  def set_request
+    # si c'est la première request du user
+    new_request if @user.requests.empty?
 
-  def message_parse
-    RecastAI::Client.new(ENV["RECAST_TOKEN"], "fr").text_request(@message)
+    # set @request
+    @request = @user.requests.last
+
+    # check si la dernière request est close ou si ça fait trop longtemps
+    if !@request.wait_message || ((Time.now) - @request.updated_at) / 60 >= 10
+      @request.update(wait_message: false)
+      @request = new_request
+    end
   end
 
   # création d'un request avec un service
   def new_request
     @request = Request.new(wait_message: true, user: @user)
+  end
+
+  def message_parse
+    @parsed_message = RecastAI::Client.new(ENV["RECAST_TOKEN"], "fr").text_request(@message)
   end
 end
