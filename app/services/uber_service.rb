@@ -11,7 +11,7 @@ class UberService
 
     #instance de client uber (🤔sans bearer token)
     params = {
-      sandbox: (Rails.env == "developement"),
+      sandbox: (Rails.env == "development"),
       #tokens d'environnement
       server_token: ENV["UBER_SERVER_TOKEN"],
       client_id: ENV["UBER_CLIENT_ID"],
