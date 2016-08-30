@@ -22,7 +22,8 @@ class MessageParser
       if @request.service
         if @request.service.start_address && @request.service.end_address
           @request.update(wait_message: false)
-          return "C'est parfait. Nous nous occupons de votre commande"
+          # il faut gérer les erreurs au cas ou il y a un pb lors de la commande
+          return "C'est parfait. Nous nous occupons de votre commande."
         end
       else
         return "Comment puis-je vous aider ?"
@@ -67,6 +68,12 @@ class MessageParser
     @answer = RideConversation.new(@request, @parsed_message).answer
   end
 
+  def uber_request
+    api_uber_object = UberService.new(@request.service)
+    @response = api_uber_object.ride_request
+    # Commander puis stocker la request id du ride chez uber pour pouvoir suivre son status
+  end
+
   def set_request
     # check si c'est la première request du user
     if @user.requests.empty?
@@ -94,3 +101,15 @@ class MessageParser
     @parsed_message = RecastAI::Client.new(ENV["RECAST_TOKEN"], "fr").text_request(@message)
   end
 end
+
+
+# #test de uber request
+# parameters = {
+#      start_latitude: 48.864667,
+#      start_longitude: 2.378838,
+#      end_latitude: 48.852115,
+#      end_longitude: 2.268011
+#    }
+
+# ride
+
