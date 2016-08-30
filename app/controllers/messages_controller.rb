@@ -13,7 +13,8 @@ class MessagesController < ApplicationController
   # Methode pour les sms test
   def create
     # les messages sont des tests
-    @test = true
+    @view = "interface" if request.referrer.include?("interface")
+    @view = "chat"
     @body = params[:message][:body]
     @phone_number = params[:message][:user]
     # création de l'utilisateur s'il n'existe pas
@@ -28,7 +29,7 @@ class MessagesController < ApplicationController
 
   # Idem pour les vrais sms
   def receive_sms
-    @test = false
+    @view = "sms"
     @body = params["Body"]
     @phone_number = params["From"]
     set_user_create_message_parse_and_point(user_path)
@@ -54,7 +55,7 @@ class MessagesController < ApplicationController
     create_message
 
     # réponse si le message n'est pas un test
-    reply unless @test
+    reply if @view == "sms"
 
     redirect_to interface_path(@user) if @interface
     redirect_to user_path(@user) unless @interface
@@ -83,7 +84,7 @@ class MessagesController < ApplicationController
   end
 
   def create_message
-    if @test
+    if @view == "chat"
       Message.create(body: "Test : " + @message_body, user: @user, sender: @sender)
     else
       Message.create(body: @message_body, user: @user, sender: @sender)
