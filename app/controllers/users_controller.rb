@@ -66,13 +66,6 @@ class UsersController < ApplicationController
     # @messages = Message.where(user: @user).order("created_at ASC")
   end
 
-  def clean_show
-    @message = Message.new
-    # TODO - Set this to an actual user
-    @user = User.all.last
-    @messages = @user.messages.sort_by { |message| message.created_at }
-  end
-
   def index
     @users = User.where.not('phone_number' => nil).order("created_at DESC")
   end
