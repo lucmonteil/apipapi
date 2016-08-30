@@ -1,10 +1,10 @@
-<% messages.each do |message| %>
+<% messages.each_with_index do |message, index| %>
   <% if message.sender == true %>
-    <div class="user-message text-right">
+    <div class="user-message text-right" <%= messages.count == (index+1) ? 'id="last"' : "" %>>
       <p><%= message.body %></p>
     </div>
   <% else %>
-    <div class="bot-message">
+    <div class="bot-message" <%= messages.count == (index+1) ? 'id=last' : "" %>>
       <p><%= message.body %></p>
     </div>
   <% end %>
