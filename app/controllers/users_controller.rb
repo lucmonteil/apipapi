@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  skip_before_action :authenticate_user!, only: [:index, :show]
+  skip_before_action :authenticate_user!, only: [:index, :show, :clean_show]
 
   def show
 
@@ -31,6 +31,11 @@ class UsersController < ApplicationController
 
     # @messages = Message.where(user: @user).order("created_at ASC")
   end
+
+  def clean_show
+
+  end
+
 
   def index
     @users = User.where.not('phone_number' => nil).order("created_at DESC")
