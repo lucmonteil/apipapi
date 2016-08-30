@@ -1,8 +1,6 @@
-.chat-box{
+.chat{
   background: white;
-  padding: 30px;
   height: 80vh;
-  width: 55% ;
   border-radius: 4px;
   box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
   border: 1px solid rgba(0, 0, 0, 0.1);
@@ -10,13 +8,32 @@
 }
 
 .chat-box-header{
-  position: absolute;
-  top: 10px;
   width: inherit;
   border-bottom: 1px solid black;
+  padding: 10px;
 }
 
-.chat-box-footer{
+.chat-box-input{
   position: absolute;
+  padding: 5px;
+  border-top: 1px solid black;
   bottom: 10px;
+  width: 100%
+}
+
+.chat-box-messages{
+  height: 80vh;
+  overflow-y: scrollable;
+
+    .user-message {
+      background-color: lightgrey;
+      padding: 10px;
+      margin-bottom: 5px;
+    }
+
+    .bot-message {
+      background-color: white;
+      margin-bottom: 5px;
+      padding: 10px;
+    }
 }

@@ -33,7 +33,7 @@ class UsersController < ApplicationController
   end
 
   def clean_show
-
+    @messages = []
   end
 
 
