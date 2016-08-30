@@ -70,7 +70,8 @@ class UsersController < ApplicationController
     @message = Message.new
     # TODO - Set this to an actual user
     @user = User.all.last
-    @user_messages = @user.messages.where(sender: true)
+    @messages = @user.messages
+    # @bot_messages = @user.messages.where(sender: false)
   end
 
   def index

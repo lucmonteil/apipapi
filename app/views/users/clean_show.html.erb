@@ -5,12 +5,7 @@
         <p>Chat</p>
      </div>
      <div class="chat-box-messages">
-       <div class="user-message">
-        <p>Hey, get me a cab</p>
-       </div>
-       <div class="bot-message text-right">
-        <p>Allright, where you at ?</p>
-       </div>
+       <%= render 'clean_messages', messages: @messages %>
      </div>
      <div class="chat-box-input text-center">
         <%= simple_form_for @message, url: messages_path, :remote => true do |f| %>
