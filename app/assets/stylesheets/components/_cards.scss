@@ -1,5 +1,11 @@
-.review-card{
-  width: 330px;
-  position: relative;
+.flex-review {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 20px;
+}
+
+.flex-review-item {
+  flex: 1 0 20%;
 }
 
