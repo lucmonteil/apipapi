@@ -19,6 +19,40 @@ class UsersController < ApplicationController
 
     @user.requests.each do |request|
 
+      service = request.service
+
+      if service.class == Ride
+
+        ride = service
+
+        if ride.start_address
+
+          start_address = ride.start_address
+
+          @items << {
+            class: start_address.class,
+            instance: start_address,
+            to_or_from: "from",
+            created_at: start_address.created_at
+          }
+        end
+
+        if ride.end_address
+
+          end_address = ride.end_address
+
+          @items << {
+            class: end_address.class,
+            instance: end_address,
+            to_or_from: "to",
+            created_at: end_address.created_at
+          }
+        end
+      end
+    end
+
+    @user.requests.each do |request|
+
       @items << {
         class: request.class,
         instance: request,
