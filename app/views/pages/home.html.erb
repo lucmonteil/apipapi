@@ -1,49 +1,50 @@
 <div class="wrapper-blue">
-  <div class="col-xs-12 col-sm-8">
-    <div>
-      <div class="banner-text">
-        <h3>Order a Taxi, by a simple text</h3>
-        <p>Type your phone :</p>
-      </div>
-      <div>
-        <form>
-          <div class="form-inline">
-            <%= render 'shared/digicode' %>
+  <div class="container text-left">
+    <div class="row">
+      <div class="col-xs-12 col-sm-8">
+        <div class="text-left">
+          <h3>Order a Taxi, by a <span id="yellowed">simple text</span></h3>
+          <h1><strong >07 56 79 64 81</strong></h1>
+        </div>
+        <div class="padding-top">
+          <p>Or type your number and we'll call you back </p>
+          <form>
+            <div class="form-inline padding-bottom">
+              <%= render 'shared/digicode' %>
+            </div>
+          </form>
+        </div>
+        <div class="flex-review ">
+          <div>
+            <%= image_tag('happy-grandpa.png', class: 'avatar-large')  %>
           </div>
-        </form>
-      </div>
-    </div>
-    <div>
-      <p>Send a text to </p>
-      <h1><strong >07 56 79 64 81</strong></h1>
-    </div>
-    <div class="col-xs-8 col-xs-offset-2 flex-review">
-      <div>
-        <%= image_tag('happy-grandpa.png', class: 'banner-avatar')  %>
-      </div>
-      <div class="flex-review-item">
-        <div>
-          <p>"5-stars service, just a perfect ride !"</p>
+          <div class="flex-review-item">
+            <div>
+              <p>"5-stars service, just a perfect ride !"</p>
+            </div>
+            <div>
+              <%= image_tag('5-stars.png', class: 'stars')  %>
+            </div>
+          </div>
         </div>
-        <div>
-          <%= image_tag('5-stars.png', class: 'banner-avatar')  %>
+        <div class="flex-review">
+          <div>
+            <%= image_tag('happy-grandma.png', class: 'avatar-large')  %>
+          </div>
+          <div class="flex-review-item">
+            <div>
+              <p>"Fabulous driver! As good as my grandson's !"</p>
+            </div>
+            <div>
+              <%= image_tag('5-stars.png', class: 'stars')  %>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="col-xs-8 col-xs-offset-2 flex-review">
-      <div>
-        <%= image_tag('happy-grandma.png', class: 'banner-avatar')  %>
-      </div>
-      <div class="flex-review-item">
-        <div>
-          <p>"Fabulous driver! As good as my grandson's !"</p>
-        </div>
-        <div>
-          <%= image_tag('5-stars.png', class: 'banner-avatar')  %>
-        </div>
+      <div class="col-xs-12 col-sm-4 text-left">
+        <%= image_tag('messenger-bot.gif', height:"550px")  %>
       </div>
     </div>
   </div>
-  <div class="col-xs-12 col-sm-4">
-  </div>
+
 </div>
