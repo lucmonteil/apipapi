@@ -1,0 +1,11 @@
+<% messages.each do |message| %>
+  <% if message.sender == true %>
+    <div class="user-message text-right">
+      <p><%= message.body %></p>
+    </div>
+  <% else %>
+    <div class="bot-message">
+      <p><%= message.body %></p>
+    </div>
+  <% end %>
+<% end %>

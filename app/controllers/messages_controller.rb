@@ -21,6 +21,11 @@ class MessagesController < ApplicationController
     # parsing
     # répartition vers la bonne methode
     set_user_create_message_parse_and_point
+
+    if request.referrer.include?("interface")
+      redirect_to interface
+      return
+    end
   end
 
   # Idem pour les vrais sms
