@@ -17,13 +17,13 @@ class MessageParser
     error = "Je n'ai pas compris votre demande. Pour me moment " \
             "nous proposons des courses UBER. Essayez en nous donnant " \
             "votre adresse de départ et votre adresse d'arrivée."
+
     if @intention == "accept"
       if @request.service
         if @request.service.start_address && @request.service.end_address
           @request.update(wait_message: false)
-          uber_request
           # il faut gérer les erreurs au cas ou il y a un pb lors de la commande
-          return "C'est parfait. Nous nous occupons de votre commande. ( #{@response} )"
+          return "C'est parfait. Nous nous occupons de votre commande."
         end
       else
         @request.update(wait_message: false)
@@ -102,3 +102,15 @@ class MessageParser
     @parsed_message = RecastAI::Client.new(ENV["RECAST_TOKEN"], "fr").text_request(@message)
   end
 end
+
+
+# #test de uber request
+# parameters = {
+#      start_latitude: 48.864667,
+#      start_longitude: 2.378838,
+#      end_latitude: 48.852115,
+#      end_longitude: 2.268011
+#    }
+
+# ride
+

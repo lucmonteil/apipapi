@@ -59,10 +59,10 @@ class UberService
   def ride_request
     response = @client.trip_request(
       product_id: @product_id,
-      start_latitude: @start_latitude,
-      start_longitude: @start_longitude,
-      end_latitude: @end_latitude,
-      end_longitude: @end_longitude
-      )
+      start_latitude: @ride.start_address.latitude,
+      start_longitude: @ride.start_address.longitude,
+      end_latitude: @ride.end_address.latitude,
+      end_longitude: @ride.end_address.longitude
+    )
   end
 end

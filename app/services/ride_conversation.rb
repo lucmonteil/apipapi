@@ -50,7 +50,6 @@ class RideConversation
 
   # TODO trouver les bonnes clefs entities (indice ce n'est pas :from et :to)
   def set_variables
-
     if address = @found_params.entities.detect {|entity| entity.name == "from"} || @ride.start_address
       if @ride.start_address.nil?
         geocode(address.value, "start") if address
@@ -59,6 +58,7 @@ class RideConversation
       else
         @start_address = @ride.start_address
       end
+
       @time = UberService.new(@ride).time_estimates
       @time = @time / 60 if @time.class == Fixnum
       @start_address_nice = Geocoder.search("#{@start_address.latitude},#{@start_address.longitude}")[0].formatted_address
