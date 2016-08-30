@@ -70,20 +70,8 @@ class UsersController < ApplicationController
     @message = Message.new
     # TODO - Set this to an actual user
     @user = User.all.last
-
-    @messages = User.messages
-
-    respond_to do |format|
-      if @message.save
-        format.html { redirect_to interface_path(@message)}
-        format.js
-      else
-        format.html { render 'clean_show'}
-        format.js
-      end
-    end
+    @user_messages = @user.messages.where(sender: true)
   end
-
 
   def index
     @users = User.where.not('phone_number' => nil).order("created_at DESC")

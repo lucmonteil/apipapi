@@ -11,5 +11,4 @@ Rails.application.routes.draw do
   resources :users, only: [:index, :show]
 
   get 'interface' => 'users#clean_show'
-  post 'interface' => 'users#clean_show'
 end

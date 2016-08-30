@@ -21,6 +21,17 @@ class MessagesController < ApplicationController
     # parsing
     # répartition vers la bonne methode
     set_user_create_message_parse_and_point
+
+    # Respond to remote messages from interface_path --> dynamically load messages
+    respond_to do |format|
+      if @message.save
+        format.html { redirect_to interface_path(@message)}
+        format.js
+      else
+        format.html { render 'clean_show'}
+        format.js
+      end
+    end
   end
 
   # Idem pour les vrais sms
