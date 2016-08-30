@@ -44,7 +44,7 @@ class MessagesController < ApplicationController
 
   # interprète le corps parsé et renvoit vers la bonne méthode
   def parse_and_point
-    @reply_message_body = MessageParser.new(@message_body, @user).request_handler
+    @reply_message_body = MessageParser.new(@message_body, @user).reply
 
     # enregistrement du message
     @sender = false
@@ -71,7 +71,7 @@ class MessagesController < ApplicationController
 
   def create_user
     @user = User.create({
-              email: "#{@phone_number}@apipapi.com",
+              email: "#{@phone_number.split(" ").join}@apipapi.com",
               password: Random.new_seed,
               phone_number: @phone_number,
               # le nom de l'utilisateur est set à UNKNOWN pour l'utiliser dans les vues
