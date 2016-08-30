@@ -1,4 +1,22 @@
 .chat-box{
-  margin: 10px;
+  background: white;
+  padding: 30px;
+  height: 80vh;
+  width: 55% ;
+  border-radius: 4px;
+  box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  position: relative;
+}
 
-  }
+.chat-box-header{
+  position: absolute;
+  top: 10px;
+  width: inherit;
+  border-bottom: 1px solid black;
+}
+
+.chat-box-footer{
+  position: absolute;
+  bottom: 10px;
+}
