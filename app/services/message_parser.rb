@@ -14,7 +14,7 @@ class MessageParser
 
   def reply
 
-    error = "Je n'ai pas compris votre demande. Pour me moment " \
+    error = "Je n'ai pas compris votre demande. Pour le moment " \
             "nous proposons des courses UBER. Essayez en nous donnant " \
             "votre adresse de départ et votre adresse d'arrivée."
 
@@ -22,8 +22,9 @@ class MessageParser
       if @request.service
         if @request.service.start_address && @request.service.end_address
           @request.update(wait_message: false)
+          uber_request
           # il faut gérer les erreurs au cas ou il y a un pb lors de la commande
-          return "C'est parfait. Nous nous occupons de votre commande."
+          return "C'est parfait. Nous vous confirmons l'arrivée de votre chauffeur dans les plus brefs délais. #{@response.status}"
         end
       else
         return "Comment puis-je vous aider ?"

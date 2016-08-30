@@ -20,7 +20,12 @@ class MessagesController < ApplicationController
     # sauvegarde du message
     # parsing
     # répartition vers la bonne methode
-    set_user_create_message_parse_and_point
+
+    if request.referrer.include?("interface")
+      set_user_create_message_parse_and_point(interface_path)
+    else
+      set_user_create_message_parse_and_point(user_path(@user))
+    end
   end
 
   # Idem pour les vrais sms
@@ -28,22 +33,22 @@ class MessagesController < ApplicationController
     @test = false
     @body = params["Body"]
     @phone_number = params["From"]
-    set_user_create_message_parse_and_point
+    set_user_create_message_parse_and_point(user_path(@user))
   end
 
   private
 
-  def set_user_create_message_parse_and_point
+  def set_user_create_message_parse_and_point(redirect_path)
     create_user unless @user = User.find_by_phone_number(@phone_number)
     # le message vient de l'utilisateur
     @sender = true
     @message_body = @body
     create_message
-    parse_and_point
+    parse_and_point(redirect_path)
   end
 
   # interprète le corps parsé et renvoit vers la bonne méthode
-  def parse_and_point
+  def parse_and_point(redirect_path)
     @reply_message_body = MessageParser.new(@message_body, @user).reply
     # enregistrement du message
     @sender = false
@@ -53,7 +58,7 @@ class MessagesController < ApplicationController
     # réponse si le message n'est pas un test
     reply unless @test
 
-    redirect_to user_path(@user)
+    redirect_to redirect_path
   end
 
   # envoit d'un message à l'utilisateur et sauvegarde du message

@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  skip_before_action :authenticate_user!, only: [:index, :show]
+  skip_before_action :authenticate_user!, only: [:index, :show, :clean_show]
 
   def show
 
@@ -64,6 +64,13 @@ class UsersController < ApplicationController
     @items = @items.sort_by { |item| item[:created_at] }
 
     # @messages = Message.where(user: @user).order("created_at ASC")
+  end
+
+  def clean_show
+    @message = Message.new
+    # TODO - Set this to an actual user
+    @user = User.all.last
+    @messages = @user.messages.sort_by { |message| message.created_at }
   end
 
   def index
