@@ -8,12 +8,14 @@
 }
 
 .chat-box-header{
+  background-color: white;
   width: inherit;
   border-bottom: 1px solid black;
   padding: 10px;
 }
 
 .chat-box-input{
+  background-color: white;
   position: absolute;
   padding: 5px;
   border-top: 1px solid black;
@@ -22,9 +24,8 @@
 }
 
 .chat-box-messages{
-  height: 80vh;
-  overflow-y: scrollable;
-
+  height: 50vh;
+  overflow-y: scroll;
     .user-message {
       background-color: lightgrey;
       padding: 10px;
