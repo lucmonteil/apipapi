@@ -45,7 +45,6 @@ class MessagesController < ApplicationController
   # interprète le corps parsé et renvoit vers la bonne méthode
   def parse_and_point
     @reply_message_body = MessageParser.new(@message_body, @user).reply
-
     # enregistrement du message
     @sender = false
     @message_body = @reply_message_body

@@ -11,8 +11,7 @@ GIT
 
 GIT
   remote: https://github.com/Emerichenon/uber-ruby.git
-  revision: eb3dfc360eeab798aed9eb69ae1d1dbf6f139e7b
-  branch: better-fail-patch
+  revision: be0c6af1665584951f37ac65ddbb3f4a32cf1cf9
   specs:
     uber-ruby (0.6.0)
       faraday (~> 0.9.0)

@@ -27,7 +27,7 @@ gem 'twilio-ruby'
 gem 'geocoder'
 
 #Uber
-gem 'uber-ruby', require: 'uber', git: "https://github.com/Emerichenon/uber-ruby.git", branch: "better-fail-patch"
+gem 'uber-ruby', require: 'uber', git: "https://github.com/Emerichenon/uber-ruby.git"
 
 gem 'RecastAI', '~> 1.1'
 gem 'rb-readline'
