@@ -43,12 +43,12 @@
             <p>
               <% if item[:to_or_from] == "to" %>
                 <span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span>
-                <% type = "To:" %>
+                <%= type = "To: " %>
               <% else %>
                 <span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span>
-                <%= type = "From:" %>
+                <%= type = "From: " %>
               <% end %>
-              <%= "#{type} #{address.query}" %>
+              <%= "#{address.query}" %>
             </p>
           </div>
         <% end %>
