@@ -18,15 +18,16 @@ class RideConversation
       if @price == "distance_exceeded"
         @answer = "Désolé, la distance entre #{@start_address_nice } " \
                 "à #{@end_address_nice} est supérieure à 100 kilomètres. Veuillez réessayer !"
+                @request.update(wait_message: false)
       elsif @price == "no_uber"
         @answer = "Désolé, nous ne trouvons pas de Uber entre #{@start_address_nice } " \
-                "et #{@end_address_nice}. Veuillez réessayer !"
+                "et #{@end_address_nice}."
+                @request.update(wait_message: false)
       else
         @answer = "Le prix de la course de #{@start_address_nice } " \
                 "à #{@end_address_nice} est de #{@price} (une voiture peut être là " \
                 "dans #{@time} minutes). Envoyez OUI pour commander"
       end
-      @request.update(wait_message: false)
     elsif @time
       if @time.class == Fixnum
         @answer = "Une voiture peut venir vous chercher au #{@start_address_nice} " \
@@ -50,9 +51,10 @@ class RideConversation
 
   # TODO trouver les bonnes clefs entities (indice ce n'est pas :from et :to)
   def set_variables
-    if address = @found_params.entities.detect {|entity| entity.name == "from"} || @ride.start_address
+
+    if location_from = @found_params.entities.detect {|entity| entity.name == "from"} || @ride.start_address
       if @ride.start_address.nil?
-        geocode(address.value, "start") if address
+        geocode(location_from.value, "start") if location_from
         @ride.start_address = @start_address
         @ride.save
       else
@@ -64,15 +66,28 @@ class RideConversation
       @start_address_nice = Geocoder.search("#{@start_address.latitude},#{@start_address.longitude}")[0].formatted_address
     end
 
-    if destination = @found_params.entities.detect {|entity| entity.name == "to"} || @ride.end_address
+    if location_to = @found_params.entities.detect {|entity| entity.name == "to"} || @ride.end_address
       if @ride.end_address.nil?
-        geocode(destination.value, "end") if destination
+        geocode(location_to.value, "end") if location_to
         @ride.end_address = @end_address
         @ride.save
       else
         @end_address = @ride.end_address
       end
       @end_address_nice = Geocoder.search("#{@end_address.latitude},#{@end_address.longitude}")[0].formatted_address
+    end
+
+    if (found_location = @found_params.entities.detect {|entity| entity.name == "address"}) && (@ride.end_address || @ride.start_address)
+      geocode(found_location.value, "found") if found_location
+      unless @ride.end_address
+        @ride.end_address = @found_address
+        @end_address_nice = Geocoder.search("#{@end_address.latitude},#{@end_address.longitude}")[0].formatted_address
+      end
+      unless @ride.start_address
+        @ride.start_address = @found_address
+        @start_address_nice = Geocoder.search("#{@start_address.latitude},#{@start_address.longitude}")[0].formatted_address
+      end
+      @ride.save
     end
 
     unless @ride.end_address.nil? || @ride.start_address.nil?

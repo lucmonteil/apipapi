@@ -31,10 +31,24 @@
                 <span class="glyphicon glyphicon-road" aria-hidden="true"></span>
                 <% service = "Uber" %>
               <% else %>
-                <span class="glyphicon glyphicon-glass" aria-hidden="true"></span>
-                <%= service = "service sympa" %>
+                <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                <%= service = "question" %>
               <% end %>
-              <%= " Demande de #{service} à #{request.created_at.to_s[-12..-4]}" %>
+              <%= "Demande: #{service} à #{request.created_at.to_s[-12..-4]}" %>
+            </p>
+          </div>
+        <% elsif item[:class] == Address %>
+          <% address = item[:instance] %>
+          <div class="flex address">
+            <p>
+              <% if item[:to_or_from] == "to" %>
+                <span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span>
+                <%= type = "To: " %>
+              <% else %>
+                <span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span>
+                <%= type = "From: " %>
+              <% end %>
+              <%= "#{address.query}" %>
             </p>
           </div>
         <% end %>
