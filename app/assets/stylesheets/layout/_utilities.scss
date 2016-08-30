@@ -28,12 +28,6 @@
   height: 30px;
 }
 
-.flex {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
 .top-bar {
   width: 100%;
   background-color: white;
@@ -59,84 +53,46 @@
   height: 150px;
 }
 
-.fa-arrow-circle-up {
-  font-size: 78px;
-  padding-top: 30px;
-  color: $yellow;
+
+#yellowed{
+  box-shadow: inset 0px -10px $yellow
 }
 
-#chat {
-  margin-bottom: 15px;
-  border-radius: 10px;
+.padding-bottom {
+  padding-bottom: 40px;
 }
 
-#order_content{
-  box-shadow: inset 0px -8px $yellow
+.padding-top {
+  padding-top: 25px;
 }
 
-
-
-// à utiliser si l'on souhaite mettre un effet par la suite
-/* Icon Up */
-@-webkit-keyframes hvr-icon-up {
-  0%,
-  50%,
-  100% {
-    -webkit-transform: translateY(0);
-    transform: translateY(0);
-  }
-
-  25%,
-  75% {
-    -webkit-transform: translateY(-6px);
-    transform: translateY(-6px);
-  }
+.little-padding-top {
+  padding-top: 10px;
 }
 
-@keyframes hvr-icon-up {
-  0%,
-  50%,
-  100% {
-    -webkit-transform: translateY(0);
-    transform: translateY(0);
-  }
-
-  25%,
-  75% {
-    -webkit-transform: translateY(-6px);
-    transform: translateY(-6px);
-  }
+.margin-top {
+  margin-top: 35px;
 }
 
-/* Icon Up */
-.hvr-icon-up {
-  display: inline-block;
-  vertical-align: middle;
-  -webkit-transform: translateZ(0);
-  transform: translateZ(0);
-  box-shadow: 0 0 1px rgba(0, 0, 0, 0);
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
-  -moz-osx-font-smoothing: grayscale;
-  position: relative;
-  padding-right: 2.2em;
+.phone-form {
+    display: block;
+    width: 100%;
+    height: 45px;
+    font-size: 19px;
+    line-height: 1.4;
+    color: #555555;
+    border: 1px solid #ccc;
+    border-radius: 17px;
+    text-align: center;
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+    -webkit-transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+    transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
 }
 
-.hvr-icon-up:before {
-  content: "\f01b";
-  position: absolute;
-  right: 1em;
-  padding: 0 1px;
-  font-family: FontAwesome;
-  -webkit-transform: translateZ(0);
-  transform: translateZ(0);
+.stars {
+  width: 120px;
 }
 
-.hvr-icon-up:hover:before, .hvr-icon-up:focus:before, .hvr-icon-up:active:before {
-  -webkit-animation-name: hvr-icon-up;
-  animation-name: hvr-icon-up;
-  -webkit-animation-duration: 0.75s;
-  animation-duration: 0.75s;
-  -webkit-animation-timing-function: ease-out;
-  animation-timing-function: ease-out;
+#phone {
+  border-radius: 20px;
 }

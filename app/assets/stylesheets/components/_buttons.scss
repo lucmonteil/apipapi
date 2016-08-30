@@ -7,6 +7,21 @@
   transition: all 0.1s ease;
     &:hover {
       color: white;
-      border-top: 4px solid $yellow !important;
     }
+}
+
+
+.btn-treehouse-blue {
+  color: white;
+  padding: 10px 15px;
+  border-radius: 8px;
+  background: #3e5d84;
+  border: none;
+  transition: background 0.3s ease;
+}
+.btn-treehouse-blue:hover {
+  opacity: 1;
+  background: $brand-color;
+  text-decoration: none;
+  color: white;
 }

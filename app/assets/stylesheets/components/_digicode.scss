@@ -3,18 +3,18 @@
   justify-content: space-around;
 
   .keyboard-dial {
-    height: 60px;
+    height: 55px;
     width: 60px;
-    margin: 6px;
-    border-radius: 7px;
-    box-shadow: rgb(199, 130, 162) 0px 6px 0px 0px;
-    border-color: rgb(199, 130, 162);
-    color: rgb(180, 100, 120);
+    margin: 5px;
+    border-radius: 10px;
+    box-shadow: #274060 0px 3px 0px 0px;
+    border-color: #274060;
+    color: #777;
     font-weight: bolder;
 
     &:hover {
-      background-color: rgb(200, 150, 180);
-      color: white;
+      background-color: #E6E6E6;
+      color: #274060;
     }
   }
 
