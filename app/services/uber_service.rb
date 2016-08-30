@@ -10,9 +10,10 @@ class UberService
     @product_id = "5b451799-a7c3-480e-8720-891f2b51abb4"
 
     #instance de client uber (🤔sans bearer token)
+
+    #tokens d'environnement
     oauth_params = {
       sandbox: (Rails.env == "developement"),
-      #tokens d'environnement
       server_token: ENV["UBER_SERVER_TOKEN"],
       client_id: ENV["UBER_CLIENT_ID"],
       client_secret: ENV["UBER_CLIENT_SECRET"],
@@ -23,7 +24,6 @@ class UberService
 
     params = {
       sandbox: (Rails.env == "developement"),
-      #tokens d'environnement
       server_token: ENV["UBER_SERVER_TOKEN"],
       client_id: ENV["UBER_CLIENT_ID"],
       client_secret: ENV["UBER_CLIENT_SECRET"],
