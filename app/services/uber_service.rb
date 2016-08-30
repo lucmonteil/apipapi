@@ -10,13 +10,23 @@ class UberService
     @product_id = "5b451799-a7c3-480e-8720-891f2b51abb4"
 
     #instance de client uber (🤔sans bearer token)
-    params = {
-      sandbox: (Rails.env == "development"),
-      #tokens d'environnement
+
+    #tokens d'environnement
+    oauth_params = {
+      sandbox: (Rails.env == "developement"),
       server_token: ENV["UBER_SERVER_TOKEN"],
       client_id: ENV["UBER_CLIENT_ID"],
       client_secret: ENV["UBER_CLIENT_SECRET"],
       bearer_token: @bearer_token,
+    }
+
+    @oauth_client = Uber::Client.new(oauth_params)
+
+    params = {
+      sandbox: (Rails.env == "developement"),
+      server_token: ENV["UBER_SERVER_TOKEN"],
+      client_id: ENV["UBER_CLIENT_ID"],
+      client_secret: ENV["UBER_CLIENT_SECRET"],
     }
 
     @client = Uber::Client.new(params)
@@ -57,7 +67,7 @@ class UberService
   end
 
   def ride_request
-    response = @client.trip_request(
+    response = @oauth_client.trip_request(
       product_id: @product_id,
       start_latitude: @ride.start_address.latitude,
       start_longitude: @ride.start_address.longitude,
