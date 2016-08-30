@@ -26,7 +26,6 @@ class MessageParser
           return "C'est parfait. Nous nous occupons de votre commande. ( #{@response} )"
         end
       else
-        @request.update(wait_message: false)
         return "Comment puis-je vous aider ?"
       end
     elsif @intention == "cancel"
@@ -35,17 +34,16 @@ class MessageParser
         return "Votre commande a été annulée. Renvoyer une demande quand vous "\
                "voulez : je reste à votre service"
       else
-        @request.update(wait_message: false)
         return "Je me suis emmelé les pinceaux. "\
                "Comment puis-je vous venir en aide ?"
       end
     end
 
-    if @intention == "get-a-cab"
+    if @intention == "get-a-cab" || @intention == "complementary-address"
       return ride
     elsif @intention == "information"
       return "Nous proposons des courses UBER. Essayez en nous donnant " \
-              "votre adresse de départ et votre adresse d'arrivée."
+             "votre adresse de départ et votre adresse d'arrivée."
     elsif @intention == "say-hi"
       sentences = @parsed_message.sentences
       if sentence = sentences.detect { |sentence| sentence.entities.detect {|entity| entity.name == "firstname" } }
@@ -77,21 +75,22 @@ class MessageParser
   end
 
   def set_request
-    # si c'est la première request du user
-    @request = new_request if @user.requests.empty?
-
-    # set @request
-    @request = @user.requests.last
+    # check si c'est la première request du user
+    if @user.requests.empty?
+      @request = create_request
+    else
+      @request = @user.requests.last
+    end
 
     # check si la dernière request est close ou si ça fait trop longtemps (600 secondes = 10 minutes)
     if !@request.wait_message || ((Time.now) - @request.updated_at)  >= 600
       @request.update(wait_message: false)
-      @request = new_request
+      @request = create_request
     end
   end
 
   # création d'un request avec un service
-  def new_request
+  def create_request
     @request = Request.new(wait_message: true)
     @request.user = @user
     @request.save
