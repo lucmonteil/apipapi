@@ -1,3 +1,5 @@
+<body onload="scrollTo(0,document.body.scrollHeight)">
+
 <div class="wrapper-white">
   <div class="container">
    <div class="chat">
@@ -8,7 +10,7 @@
        <%= render 'clean_messages', messages: @messages %>
      </div>
      <div class="chat-box-input text-center">
-        <%= simple_form_for @message, url: messages_path, :remote => true do |f| %>
+        <%= simple_form_for @message, url: messages_path do |f| %>
           <%= f.input :body, label: false %>
           <%= f.input :user, as: :hidden, input_html: { value: @user.phone_number } %>
           <%= f.button :submit %>

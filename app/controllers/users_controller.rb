@@ -70,8 +70,7 @@ class UsersController < ApplicationController
     @message = Message.new
     # TODO - Set this to an actual user
     @user = User.all.last
-    @messages = @user.messages
-    # @bot_messages = @user.messages.where(sender: false)
+    @messages = @user.messages.sort_by { |message| message.created_at }
   end
 
   def index

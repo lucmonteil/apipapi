@@ -22,15 +22,9 @@ class MessagesController < ApplicationController
     # répartition vers la bonne methode
     set_user_create_message_parse_and_point
 
-    # Respond to remote messages from interface_path --> dynamically load messages
-    respond_to do |format|
-      if @message.save
-        format.html { redirect_to interface_path(@message)}
-        format.js
-      else
-        format.html { render 'clean_show'}
-        format.js
-      end
+    if request.referrer.include?("interface")
+      redirect_to interface
+      return
     end
   end
 
