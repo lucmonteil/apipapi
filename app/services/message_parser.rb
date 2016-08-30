@@ -17,12 +17,13 @@ class MessageParser
     error = "Je n'ai pas compris votre demande. Pour me moment " \
             "nous proposons des courses UBER. Essayez en nous donnant " \
             "votre adresse de départ et votre adresse d'arrivée."
-
     if @intention == "accept"
       if @request.service
         if @request.service.start_address && @request.service.end_address
           @request.update(wait_message: false)
-          return "C'est parfait. Nous nous occupons de votre commande"
+          uber_request
+          # il faut gérer les erreurs au cas ou il y a un pb lors de la commande
+          return "C'est parfait. Nous nous occupons de votre commande. ( #{@response} )"
         end
       else
         @request.update(wait_message: false)
@@ -69,6 +70,12 @@ class MessageParser
     @answer = RideConversation.new(@request, @parsed_message).answer
   end
 
+  def uber_request
+    api_uber_object = UberService.new(@request.service)
+    @response = api_uber_object.ride_request
+    # Commander puis stocker la request id du ride chez uber pour pouvoir suivre son status
+  end
+
   def set_request
     # si c'est la première request du user
     @request = new_request if @user.requests.empty?
@@ -88,6 +95,7 @@ class MessageParser
     @request = Request.new(wait_message: true)
     @request.user = @user
     @request.save
+    @request
   end
 
   def message_parse
