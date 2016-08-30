@@ -33,7 +33,19 @@ class UsersController < ApplicationController
   end
 
   def clean_show
-    @messages = []
+    @message = Message.new
+    # TODO - Set this to an actual user
+    @user = User.all.last
+
+    respond_to do |format|
+      if @message.save
+        format.html { redirect_to interface_path(@message)}
+        format.js
+      else
+        format.html { render 'clean_show'}
+        format.js
+      end
+    end
   end
 
 

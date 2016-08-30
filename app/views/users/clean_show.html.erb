@@ -13,10 +13,18 @@
        </div>
      </div>
      <div class="chat-box-input text-center">
-        <form class="form-inline">
+        <%= simple_form_for @message, url: interface_path , :remote => true do |f| %>
+          <%= f.input :body, label: false %>
+          <%= f.input :user, as: :hidden, input_html: { value: @user.phone_number } %>
+          <%= f.button :submit %>
+        <% end %>
+
+
+
+        <!-- <form class="form-inline">
           <input type="text" class="form-control" placeholder="Text input">
           <button type="submit" class="btn btn-primary">Ask the bot!</button>
-        </form>
+        </form> -->
      </div>
    </div>
  </div>
