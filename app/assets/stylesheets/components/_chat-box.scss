@@ -10,26 +10,49 @@
 .chat-box-header{
   background-color: white;
   width: inherit;
-  padding: 10px;
+  padding-top: 7px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1)
 }
 
 .chat-box-messages{
   height: 78%;
   overflow-y: scroll;
-    .user-message {
-      background-color: lightgrey;
-      padding: 10px;
-      margin-bottom: 5px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    // ul {
+    //   padding: 0;
+    //   list-style-type: none;
+    // }
+    .cf {
+      &:after {
+        content: "";
+        display: table;
+        clear: both;
+      }
+    }
+    .conversation__msg {
+      padding: 5px 10px;
+      color: white;
+      font-size: 12px;
+
+      span {
+          background: white;
+          color: black;
+          display: table;
+          padding: 10px 20px;
+          border-radius: 100px;
+          float: left;
+      }
+    }
+    .right {
+      float: right !important;
+      background: #0ebeff !important;
+      color: white !important;
     }
 
-    .bot-message {
-      background-color: white;
-      margin-bottom: 5px;
-      padding: 10px;
-    }
-
-    p {
-      font-size: 18px;
-    }
 }
+
+::-webkit-scrollbar {
+    display: none;
+}
+
 
