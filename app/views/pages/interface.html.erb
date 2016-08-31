@@ -1,5 +1,3 @@
-<body onload="window.location.hash = 'last'">
-
 <div class="wrapper-white">
   <div class="container">
     <div class="row">
@@ -10,6 +8,7 @@
           </div>
           <div class="chat-box-messages">
             <%= render 'clean_messages', messages: @messages %>
+            <div id="end"></div>
           </div>
         </div>
       </div>
@@ -17,5 +16,16 @@
   </div>
 </div>
 
-
-
+<% content_for :after_js do %>
+  <script>
+  $(document).ready( function (){
+    function scrollToElement(ele) {
+      setTimeout(function() {
+        $('.chat-box-messages').scrollTop(ele.offset().top)
+      }, 100)
+      // document.getElementById('end').scrollIntoView();
+    }
+    scrollToElement($('#end'));
+  });
+  </script>
+<% end %>

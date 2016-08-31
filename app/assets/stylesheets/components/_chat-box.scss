@@ -3,7 +3,7 @@
   height: 80vh;
   border-radius: 45px;
   box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
-  border: 1px solid rgba(0, 0, 0, 0.1);
+  border: 1px solid black;
   overflow: hidden;
 }
 
@@ -42,19 +42,18 @@
       max-width: 50%;
       margin-bottom: 5px;
       span {
-          background: white;
+          background:  #EFE880;
           color: black;
           display: table;
           padding: 10px 20px;
-          border-radius: 10px;
-          border: 1px solid rgba(0, 0, 0, 0.1);
+          border-radius: 30px;
       }
     }
 
     .right {
       align-self: flex-end;
       span {
-        background: #0ebeff !important;
+        background: #48A0DC !important;
         color: white !important;
       }
 
