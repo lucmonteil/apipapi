@@ -1,20 +1,20 @@
-<ul>
+
   <% messages.each_with_index do |message, index| %>
     <% if message.sender == true %>
-      <li class="conversation__msg cf" <%= messages.count == (index+1) ? 'id="last"' : "" %>>
-         <span class="right text-right">
-            <%= image_tag('happy-grandma.png', class: 'avatar')  %>
+      <div class="conversation__msg right" <%= messages.count == (index+1) ? 'id="last"' : "" %>>
+         <span class="text-right">
             <%= message.body %>
+            <%= image_tag('happy-grandma.png', class: 'message-avatar')  %>
         </span>
-      </li>
+      </div>
     <% else %>
-      <li class="conversation__msg cf" <%= messages.count == (index+1) ? 'id="last"' : "" %>>
+      <div class="conversation__msg" <%= messages.count == (index+1) ? 'id=last' : "" %>>
         <span>
+          <%= image_tag('taxi-driver.jpg', class: 'message-avatar')  %>
           <%= message.body %>
-          <%= image_tag('taxi-driver.jpg', class: 'avatar')  %>
         </span>
-      </li>
+      </div>
     <% end %>
   <% end %>
-</ul>
+
 
