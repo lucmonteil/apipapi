@@ -79,6 +79,8 @@ class MessageParser
     # stocker la request id du ride chez uber pour pouvoir suivre son status
     @request.service.uber_request_id = @response.request_id
     @request.service.save
+
+    return @response
   end
 
   def set_request

@@ -13,8 +13,9 @@ class UberCallbacksController < ApplicationController
     # on lance donc un get avec href_resource pour obtenir les infos de la ride
     api_object = UberService.new(@ride)
     response = api_object.request_details
+    p "==============DEBUG"
     p response
 
-    render status: 200
+    render nothing: true, status: 200
   end
 end

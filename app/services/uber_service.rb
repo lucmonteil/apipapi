@@ -52,7 +52,7 @@ class UberService
       else
         return "no_uber"
       end
-    rescue Uber::Error::UnprocessableEntity => error
+    rescue StandardError => error
       error.message
     end
   end
