@@ -72,8 +72,13 @@ class MessageParser
 
   def uber_request
     api_uber_object = UberService.new(@request.service)
+
+    # Passe la commande de Uber et reçoit la réponse
     @response = api_uber_object.ride_request
-    # Commander puis stocker la request id du ride chez uber pour pouvoir suivre son status
+
+    # stocker la request id du ride chez uber pour pouvoir suivre son status
+    @request.service.uber_request_id = @response.request_id
+    @request.service.save
   end
 
   def set_request

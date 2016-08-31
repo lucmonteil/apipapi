@@ -13,7 +13,7 @@ class UberService
 
     #tokens d'environnement
     oauth_params = {
-      sandbox: (Rails.env == "developement"),
+      sandbox: (Rails.env == "development"),
       server_token: ENV["UBER_SERVER_TOKEN"],
       client_id: ENV["UBER_CLIENT_ID"],
       client_secret: ENV["UBER_CLIENT_SECRET"],
@@ -23,11 +23,14 @@ class UberService
     @oauth_client = Uber::Client.new(oauth_params)
 
     params = {
-      sandbox: (Rails.env == "developement"),
+      sandbox: (Rails.env == "development"),
       server_token: ENV["UBER_SERVER_TOKEN"],
       client_id: ENV["UBER_CLIENT_ID"],
       client_secret: ENV["UBER_CLIENT_SECRET"],
     }
+
+    # On va chercher le request_id pour updater son status après le get qui vient du webhook (voir create du uber_callbacks controller)
+    @request_id = ride.uber_request_id
 
     @client = Uber::Client.new(params)
   end
@@ -74,5 +77,9 @@ class UberService
       end_latitude: @ride.end_address.latitude,
       end_longitude: @ride.end_address.longitude
     )
+  end
+
+  def request_details
+    response = @oauth_client.trip_details @request_id
   end
 end
