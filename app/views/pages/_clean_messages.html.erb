@@ -1,11 +1,19 @@
-<% messages.each_with_index do |message, index| %>
-  <% if message.sender == true %>
-    <div class="user-message text-right" <%= messages.count == (index+1) ? 'id="last"' : "" %>>
-      <p><%= message.body %></p>
-    </div>
-  <% else %>
-    <div class="bot-message" <%= messages.count == (index+1) ? 'id=last' : "" %>>
-      <p><%= message.body %></p>
-    </div>
+
+  <% messages.each_with_index do |message, index| %>
+    <% if message.sender == true %>
+      <div class="conversation__msg right" <%= messages.count == (index+1) ? 'id="last"' : "" %>>
+         <span class="text-right">
+              <%= message.body %>
+        </span>
+
+      </div>
+    <% else %>
+      <div class="conversation__msg" <%= messages.count == (index+1) ? 'id=last' : "" %>>
+        <span>
+            <%= message.body %>
+        </span>
+      </div>
+    <% end %>
   <% end %>
-<% end %>
+
+

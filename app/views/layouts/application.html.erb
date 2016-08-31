@@ -12,7 +12,12 @@
 
   </head>
   <body>
-    <%= render 'shared/navbar' %>
+    <% if request.path.include?("interface") %>
+      <%= render 'shared/white_navbar' %>
+    <% else %>
+      <%= render 'shared/blue_navbar' %>
+    <% end %>
+
     <%= render 'shared/flashes' %>
     <%= yield %>
     <%= javascript_include_tag 'application' %>
