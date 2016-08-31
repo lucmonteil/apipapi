@@ -8,8 +8,8 @@
           </div>
           <div class="chat-box-messages">
             <%= render 'clean_messages', messages: @messages %>
-            <div id="end"></div>
           </div>
+          <div class="chat-box-input"></div>
         </div>
       </div>
     </div>
@@ -25,7 +25,7 @@
       }, 100)
       // document.getElementById('end').scrollIntoView();
     }
-    scrollToElement($('#end'));
+    scrollToElement($('#last'));
   });
   </script>
 <% end %>
