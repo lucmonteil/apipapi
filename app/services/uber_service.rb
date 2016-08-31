@@ -13,7 +13,7 @@ class UberService
 
     #tokens d'environnement
     oauth_params = {
-      sandbox: (Rails.env == "developement"),
+      sandbox: (Rails.env == "development"),
       server_token: ENV["UBER_SERVER_TOKEN"],
       client_id: ENV["UBER_CLIENT_ID"],
       client_secret: ENV["UBER_CLIENT_SECRET"],

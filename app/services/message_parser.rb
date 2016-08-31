@@ -24,7 +24,11 @@ class MessageParser
           @request.update(wait_message: false)
           uber_request
           # il faut gérer les erreurs au cas ou il y a un pb lors de la commande
-          return "C'est parfait. Nous vous confirmons l'arrivée de votre chauffeur dans les plus brefs délais. #{@response.status}"
+          if @response.status
+            return "C'est parfait. Nous vous confirmons l'arrivée de votre chauffeur dans les plus brefs délais. (Your Uber request is #{@response.status})"
+          else
+            return "Erreur de commande Uber, pas de réponse de l'API Uber ! (Your Uber request is #{@response.status})"
+          end
         end
       else
         return "Comment puis-je vous aider ?"
