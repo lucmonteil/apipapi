@@ -20,6 +20,7 @@
   height: 78%;
   overflow-y: scroll;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  padding-bottom: 5px;
 
     .cf {
       &:after {
@@ -39,6 +40,7 @@
       color: white;
       font-size: 12px;
       max-width: 50%;
+      margin-bottom: 5px;
       span {
           background: white;
           color: black;
@@ -57,23 +59,7 @@
       }
 
     }
-
-    .message-avatar {
-      width: 25px;
-      border-radius: 50%;
-      max-height: 26px;
-
-      &.avatar-right {
-        float: right;
-        margin-left: 10px;
-      }
-    }
-
-    .avatar-text{
-      display: table;
-    }
-
-}
+ }
 
 // helper classes
 
