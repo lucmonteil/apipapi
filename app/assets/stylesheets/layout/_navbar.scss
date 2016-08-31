@@ -1,7 +1,7 @@
 /* Main class */
 .navbar-wagon {
   box-shadow: 0 1px 5px 0 rgba(0,0,0,0.07),0 1px 0 0 rgba(0,0,0,0.03);
-  background: #274060;
+  background: $brand-color;
   transition: all 0.3s ease;
   display: flex;
   height: 70px;
@@ -9,6 +9,8 @@
   align-items: center;
   justify-content: space-between;
 }
+
+
 
 /* Optional class to fix the navbar on top */
 .navbar-wagon-fixed {
@@ -21,12 +23,18 @@
 
 /* Navbar logo */
 .navbar-wagon-brand {
-  padding-top: 10px;
+  letter-spacing: 3px;
   color: white;
 img {
   height: 60px;
+  padding-top: 7px;
   }
 }
+
+.navbar-wagon-brand:hover {
+    text-decoration: none;
+  }
+
 
 /* Navbar right section (with form, links, button) */
 .navbar-wagon-right {
