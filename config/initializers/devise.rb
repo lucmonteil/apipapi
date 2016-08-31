@@ -3,7 +3,7 @@
 Devise.setup do |config|
 
   config.omniauth :uber, ENV['UBER_CLIENT_ID'], ENV['UBER_CLIENT_SECRET'],
-    scope: 'request profile history'
+    scope: 'all_trips request profile history'
 
   # The secret key used by Devise. Devise uses this key to generate
   # random tokens. Changing this key will render invalid all existing

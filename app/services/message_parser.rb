@@ -22,6 +22,7 @@ class MessageParser
       if @request.service
         if @request.service.start_address && @request.service.end_address
           @request.update(wait_message: false)
+          # APPEL DU UBER
           uber_request
           # il faut gérer les erreurs au cas ou il y a un pb lors de la commande
           return "C'est parfait. Nous vous confirmons l'arrivée de votre chauffeur dans les plus brefs délais. #{@response.status}"
