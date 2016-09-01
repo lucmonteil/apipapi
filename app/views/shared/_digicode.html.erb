@@ -1,4 +1,4 @@
-<input type="phone" placeholder="ex : 0660332982"
+<input type="phone" placeholder=""
   id="popover"
   tabindex="0"
   class="form-control phone_input"
@@ -7,7 +7,7 @@
   >
 </a>
 
-<div id="keyboard" class="hidden keyboard">
+<div id="keyboard" class="hidden keyboard test-popover">
   <div class="keyboard-line">
     <button class="btn btn-default keyboard-dial" >1</button>
     <button class="btn btn-default keyboard-dial" >2</button>
@@ -51,6 +51,25 @@
           return $("#keyboard").html();
         },
       });
+
+      window.onload = function() {
+        $('.phone_input').focus();
+      }
+    });
+    $('body').on('click', function (e) {
+        //only buttons
+        if ($(e.target).attr('id') !== 'popover'
+            && $(e.target).parents('.popover.in').length === 0) {
+            $('#popover').popover('hide');
+        }
+        //buttons and icons within buttons
+        /*
+        if ($(e.target).data('toggle') !== 'popover'
+            && $(e.target).parents('[data-toggle="popover"]').length === 0
+            && $(e.target).parents('.popover.in').length === 0) {
+            $('[data-toggle="popover"]').popover('hide');
+        }
+        */
     });
   </script>
 <% end %>
