@@ -70,6 +70,10 @@ class UberService
   end
 
   def ride_request
+    if @request_id
+      @oauth_client.trip_cancel @request_id
+    end
+
     response = @oauth_client.trip_request(
       product_id: @product_id,
       start_latitude: @ride.start_address.latitude,
@@ -82,4 +86,9 @@ class UberService
   def request_details
     response = @oauth_client.trip_details @request_id
   end
+
+  # TODO: Annulation volontaire
+  # def cancel_request
+  #   response = @oauth_client.trip_cancel @request_id
+  # end
 end

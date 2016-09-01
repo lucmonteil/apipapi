@@ -94,6 +94,10 @@ class MessageParser
     return @response
   end
 
+  # TODO: possibilité d'annuler
+  # def uber_cancellation
+  # end
+
   def set_request
     # check si c'est la première request du user
     if @user.requests.empty?
