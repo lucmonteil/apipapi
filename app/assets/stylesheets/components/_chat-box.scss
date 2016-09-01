@@ -1,7 +1,7 @@
 .chat{
   background: white;
   height: 80vh;
-  border-radius: 45px;
+  border-radius: 25px;
   box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.45);
   overflow: hidden;
 }
@@ -36,24 +36,24 @@
 
     .conversation__msg {
       padding: 5px 10px;
-      color: white;
+      color: #FFFFFF;
       font-size: 12px;
       max-width: 50%;
       margin-bottom: 5px;
       span {
-          background:  #EFE880;
-          color: black;
+          background:  $yellow;
+          color: #3E3E3E;
           display: table;
           padding: 10px 20px;
-          border-radius: 30px;
+          border-radius: 17px;
       }
     }
 
     .right {
       align-self: flex-end;
       span {
-        background: #48A0DC !important;
-        color: white !important;
+        background: #3498DB !important;
+        color: #FFFFFF !important;
       }
 
     }
@@ -71,7 +71,7 @@
     margin-top: 12px;
     box-shadow: none;
     padding-left: 0px;
-    color: black;
+    color: #3E3E3E;
 
     &:focus{
       box-shadow: none;

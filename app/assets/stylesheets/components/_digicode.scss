@@ -3,20 +3,18 @@
   justify-content: space-around;
 
   .keyboard-dial {
-    height: 60px;
-    width: 60px;
-    margin: 5px;
-    border-radius: 35px;
-    /* box-shadow: #469ae0 0px 3px 0px 0px; */
-    /* border-color: white; */
-    border: 3px solid white;
-    background-color: #3F73A2;
+    height: 55px;
+    width: 55px;
+    margin: 7px;
+    border-radius: 43px;
+    border: 2px solid white;
+    background-color: #637ad1;
     color: white;
     font-weight: bolder;
 
     &:hover {
       background-color: #E6E6E6;
-      color: #274060;
+      color: #3A88D4;
     }
   }
 
@@ -37,3 +35,31 @@
     padding: 4px 10px;
     background-color: #E6E6E6;
 }
+
+
+.phone_input {
+  font-size: 20px;
+  border: none;
+  border-bottom: 2px solid white;
+  background: transparent;
+  box-shadow: none;
+  padding-left: 0px;
+  padding-bottom: 0px;
+  color: white;
+  margin-top: -27px;
+
+  &:focus{
+    box-shadow: none;
+    font-weight: bolder;
+    border-color: white;
+  }
+  &:active {
+    border-color: white;
+  }
+}
+
+.popover {
+  border-radius: 10px;
+  border: none;
+}
+
