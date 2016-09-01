@@ -35,12 +35,6 @@ class MessagesController < ApplicationController
     set_user_create_message_parse_and_point
   end
 
-  def uber_reply(options = {})
-    @phone_number = options[:phone_number]
-    @reply_message_body = options[:answer]
-    reply
-  end
-
   private
 
   def set_user_create_message_parse_and_point
