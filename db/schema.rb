@@ -21,8 +21,6 @@ ActiveRecord::Schema.define(version: 20160831141500) do
     t.float    "longitude"
     t.datetime "created_at",       null: false
     t.datetime "updated_at",       null: false
-    t.integer  "start_address_id"
-    t.integer  "end_address_id"
   end
 
   create_table "messages", force: :cascade do |t|
@@ -31,7 +29,6 @@ ActiveRecord::Schema.define(version: 20160831141500) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean  "sender"
-    t.index ["user_id"], name: "index_messages_on_user_id", using: :btree
   end
 
   create_table "requests", force: :cascade do |t|
@@ -42,18 +39,17 @@ ActiveRecord::Schema.define(version: 20160831141500) do
     t.datetime "created_at",   null: false
     t.datetime "updated_at",   null: false
     t.index ["service_type", "service_id"], name: "index_requests_on_service_type_and_service_id", using: :btree
-    t.index ["user_id"], name: "index_requests_on_user_id", using: :btree
   end
 
   create_table "rides", force: :cascade do |t|
-    t.integer  "user_id"
+
     t.string   "status"
     t.datetime "created_at",       null: false
     t.datetime "updated_at",       null: false
     t.integer  "start_address_id"
     t.integer  "end_address_id"
     t.string   "uber_request_id"
-    t.index ["user_id"], name: "index_rides_on_user_id", using: :btree
+
   end
 
   create_table "users", force: :cascade do |t|
