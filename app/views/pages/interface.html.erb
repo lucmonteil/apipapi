@@ -1,3 +1,5 @@
+
+
 <div class="wrapper-white">
   <div class="container">
     <div class="row">
@@ -34,10 +36,15 @@
     $(window).on('keydown', function(e){
       if(e && e.keyCode == 13) {
         if($('#message_body').val() != ""){
+          e.preventDefault();
           $('.simple_form').submit();
         }
       }
     });
+
+    window.onload = function() {
+      $('#message_body').focus();
+    }
 
   });
   </script>
