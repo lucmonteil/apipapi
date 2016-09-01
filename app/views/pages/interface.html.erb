@@ -9,7 +9,12 @@
           <div class="chat-box-messages">
             <%= render 'clean_messages', messages: @messages %>
           </div>
-          <div class="chat-box-input"></div>
+          <div class="chat-box-input text-center">
+              <%= simple_form_for @message, url: messages_path do |f| %>
+                <%= f.input :body,label: false,input_html: { class: 'form-input' } %>
+                <%= f.input :user, as: :hidden, input_html: { value: @user.phone_number } %>
+              <% end %>
+            </div>
         </div>
       </div>
     </div>

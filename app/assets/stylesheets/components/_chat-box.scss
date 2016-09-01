@@ -2,8 +2,7 @@
   background: white;
   height: 80vh;
   border-radius: 45px;
-  box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
-  border: 1px solid black;
+  box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.45);
   overflow: hidden;
 }
 
@@ -60,6 +59,23 @@
     }
  }
 
+.chat-box-input{
+  height: 100%;
+
+  .form-input{
+    display: initial;
+    width: 78%;
+    padding: 0px 0px !important;
+    font-size: 15px;
+    border: none;
+    border-bottom: 2px solid black;
+
+    &:focus{
+      box-shadow: none;
+    }
+  }
+
+}
 // helper classes
 
 ::-webkit-scrollbar {
