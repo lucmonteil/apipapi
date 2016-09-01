@@ -14,6 +14,10 @@ class MessageParser
 
   def reply
 
+    error = "Je n'ai pas compris votre demande. Pour le moment " \
+        "nous proposons des courses UBER. Demandez une estimation en m'envoyant " \
+        "votre adresse de départ (avec la ville) et votre adresse d'arrivée."
+
     if @intention == "say-hi"
       sentences = @parsed_message.sentences
       if sentence = sentences.detect { |sentence| sentence.entities.detect {|entity| entity.name == "person" } }
@@ -22,11 +26,11 @@ class MessageParser
         @user.first_name = @first_name
         @user.save
         return "Bonjour #{@first_name}! " \
-               "Nous proposons des courses UBER. Demandez une estimation en m'envoyant' " \
+               "Nous proposons des courses UBER. Demandez une estimation en m'envoyant " \
                "votre adresse de départ (avec la ville) et votre adresse d'arrivée."
       end
       return "Bonjour je suis votre assistant Uber ! " \
-             "Demandez une estimation de course en m'envoyant' " \
+             "Demandez une estimation de course en m'envoyant " \
              "votre adresse de départ (avec la ville) et votre adresse d'arrivée."
     elsif @intention == "get-a-cab" || @intention == "complementary-address"
       return ride
@@ -41,7 +45,8 @@ class MessageParser
           uber_request
           # il faut gérer les erreurs au cas ou il y a un pb lors de la commande
           if @response.status
-            return "Merci#{' '+@first_name}. Nous vous confirmons l'arrivée de votre chauffeur dans les 3 minutes. (Your Uber request is #{@response.status}, the id is #{@response.request_id})"
+            return "Merci#{' '+@first_name}. Nous vous confirmons l'arrivée de votre "\
+                   "chauffeur dans les 3 minutes. (Your Uber request is #{@response.status}, the id is #{@response.request_id})"
           else
             return "Veuillez m'excuser#{' '+@first_name}. Je n'ai pas réussi à vous trouver une voiture. " \
                    "Refaites une demande d'estimation en attendant 5 minutes et je ferai de mon mieux."
@@ -65,10 +70,6 @@ class MessageParser
     else
       return error
     end
-
-    error = "Je n'ai pas compris votre demande. Pour le moment " \
-            "nous proposons des courses UBER. Demandez une estimation en m'envoyant " \
-            "votre adresse de départ (avec la ville) et votre adresse d'arrivée."
   end
 
   private
