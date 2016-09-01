@@ -13,7 +13,7 @@ class UberService
 
     #tokens d'environnement
     oauth_params = {
-      sandbox: false,
+      sandbox: true,
       server_token: ENV["UBER_SERVER_TOKEN"],
       client_id: ENV["UBER_CLIENT_ID"],
       client_secret: ENV["UBER_CLIENT_SECRET"],
@@ -23,7 +23,7 @@ class UberService
     @oauth_client = Uber::Client.new(oauth_params)
 
     params = {
-      sandbox: false,
+      sandbox: true,
       server_token: ENV["UBER_SERVER_TOKEN"],
       client_id: ENV["UBER_CLIENT_ID"],
       client_secret: ENV["UBER_CLIENT_SECRET"],
