@@ -11,4 +11,7 @@ Rails.application.routes.draw do
   resources :users, only: [:index, :show]
 
   get 'interface/:id' => 'pages#interface', as: 'interface'
+
+  # Webhook Uber
+  resources :uber_callbacks, only: [:create]
 end

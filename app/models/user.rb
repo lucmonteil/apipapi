@@ -1,5 +1,5 @@
 class User < ApplicationRecord
-  has_many :messages
+  has_many :messages, dependent: :destroy
   has_many :requests
   has_many :rides, through: :requests
   # Include default devise modules. Others available are:
