@@ -29,7 +29,6 @@ ActiveRecord::Schema.define(version: 20160831141500) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean  "sender"
-    t.index ["user_id"], name: "index_messages_on_user_id", using: :btree
   end
 
   create_table "requests", force: :cascade do |t|
@@ -37,10 +36,9 @@ ActiveRecord::Schema.define(version: 20160831141500) do
     t.string   "service_type"
     t.integer  "service_id"
     t.boolean  "wait_message"
-    t.datetime "created_at",   null: false
-    t.datetime "updated_at",   null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["service_type", "service_id"], name: "index_requests_on_service_type_and_service_id", using: :btree
-    t.index ["user_id"], name: "index_requests_on_user_id", using: :btree
   end
 
   create_table "rides", force: :cascade do |t|
@@ -77,7 +75,4 @@ ActiveRecord::Schema.define(version: 20160831141500) do
     t.index ["email"], name: "index_users_on_email", unique: true, using: :btree
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
   end
-
-  add_foreign_key "messages", "users"
-  add_foreign_key "requests", "users"
 end
