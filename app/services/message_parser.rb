@@ -25,7 +25,7 @@ class MessageParser
           # APPEL DU UBER
           uber_request
           # il faut gérer les erreurs au cas ou il y a un pb lors de la commande
-          return "C'est parfait. Nous vous confirmons l'arrivée de votre chauffeur dans les plus brefs délais. #{@response.status}"
+          return "C'est parfait. Nous vous confirmons l'arrivée de votre chauffeur dans les plus brefs délais. (Your Uber request is #{@response.status}, the id is #{@response.request_id})"
         end
       else
         return "Comment puis-je vous aider ?"
