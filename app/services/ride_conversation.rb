@@ -11,29 +11,34 @@ class RideConversation
   def answer
 
     error =     "Je n'ai pas compris votre demande. Pourriez-vous envoyer " \
-                "votre demande sous la forme : Je suis au [Adresse de départ], " \
-                "je vais au [Adresse d'arrivée]"
+                "votre demande sous la forme : Je suis au [Adresse de départ, Ville], " \
+                "je vais au [Adresse d'arrivée, Ville]"
 
     if @price
       if @price == "distance_exceeded"
         @answer = "Désolé, la distance entre #{@start_address_nice } " \
-                "à #{@end_address_nice} est supérieure à 100 kilomètres. Veuillez réessayer !"
-                @request.update(wait_message: false)
+                  "à #{@end_address_nice} est supérieure à 100 kilomètres. Veuillez réessayer !"
+        @request.update(wait_message: false)
       elsif @price == "no_uber"
         @answer = "Désolé, nous ne trouvons pas de Uber entre #{@start_address_nice } " \
-                "et #{@end_address_nice}."
-                @request.update(wait_message: false)
+                  "et #{@end_address_nice}."
+        @request.update(wait_message: false)
+      elsif @request.user.uber_token
+        @answer = "Le prix de la course de #{@start_address_nice } " \
+                  "à #{@end_address_nice} est de #{@price} (une voiture peut être là " \
+                  "dans #{@time} minutes). Envoyez OUI pour commander"
       else
         @answer = "Le prix de la course de #{@start_address_nice } " \
-                "à #{@end_address_nice} est de #{@price} (une voiture peut être là " \
-                "dans #{@time} minutes). Envoyez OUI pour commander"
+                  "à #{@end_address_nice} est de #{@price} (une voiture peut être là " \
+                  "dans #{@time} minutes). Appellez-nous pour créer un compte Uber et commander " \
+                  "des chauffeurs partout en Europe."
+        @request.update(wait_message: false)
       end
     elsif @time
       if @time.class == Fixnum
         @answer = "Une voiture peut venir vous chercher au #{@start_address_nice} " \
                   "dans #{@time} minutes. Pourriez-vous me renvoyer votre adresse " \
-                  "d'arrivée pour que je puisse vous proposer un prix ? Envoyer ANNULER " \
-                  "si j'ai mal compris."
+                  "d'arrivée pour que je puisse vous proposer un prix ?"
       else
         @answer = "Désolé, la zone autour de #{@start_address_nice} n'est pas encore couverte !"
       end

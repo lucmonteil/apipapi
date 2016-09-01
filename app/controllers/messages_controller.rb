@@ -32,7 +32,7 @@ class MessagesController < ApplicationController
     @view = "sms"
     @body = params["Body"]
     @phone_number = params["From"]
-    set_user_create_message_parse_and_point(user_path)
+    set_user_create_message_parse_and_point
   end
 
   def uber_reply(options = {})

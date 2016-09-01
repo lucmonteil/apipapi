@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>ApiPapi</title>
+    <title>HappyPapy</title>
     <%= csrf_meta_tags %>
     <%= action_cable_meta_tag %>
+    <%= favicon_link_tag 'favicon_logo_v3.png'  %>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" media="all">
@@ -11,7 +12,12 @@
 
   </head>
   <body>
-    <%= render 'shared/navbar' %>
+    <% if request.path.include?("interface") %>
+      <%= render 'shared/white_navbar' %>
+    <% else %>
+      <%= render 'shared/blue_navbar' %>
+    <% end %>
+
     <%= render 'shared/flashes' %>
     <%= yield %>
     <%= javascript_include_tag 'application' %>

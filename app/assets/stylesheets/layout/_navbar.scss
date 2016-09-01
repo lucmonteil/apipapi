@@ -1,7 +1,18 @@
 /* Main class */
 .navbar-wagon {
   box-shadow: 0 1px 5px 0 rgba(0,0,0,0.07),0 1px 0 0 rgba(0,0,0,0.03);
-  background: #274060;
+  background: $brand-color;
+  transition: all 0.3s ease;
+  display: flex;
+  height: 70px;
+  padding: 0px 30px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.navbar-wagon-white {
+  box-shadow: 0 1px 5px 0 rgba(0,0,0,0.07),0 1px 0 0 rgba(0,0,0,0.03);
+  background: white;
   transition: all 0.3s ease;
   display: flex;
   height: 70px;
@@ -21,12 +32,27 @@
 
 /* Navbar logo */
 .navbar-wagon-brand {
-  padding-top: 10px;
+  letter-spacing: 3px;
   color: white;
 img {
   height: 60px;
+  padding-top: 7px;
   }
 }
+
+.navbar-wagon-brand-white {
+  padding-top: 10px;
+  color: black;
+img {
+  height: 50px;
+  }
+}
+
+.navbar-wagon-brand:hover {
+    text-decoration: none;
+  }
+
+>>>>>>> master
 
 /* Navbar right section (with form, links, button) */
 .navbar-wagon-right {
