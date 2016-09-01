@@ -86,7 +86,7 @@ class MessageParser
 
     # Passe la commande de Uber et reçoit la réponse
     @response = api_uber_object.ride_request
-
+    raise
     # stocker la request id du ride chez uber pour pouvoir suivre son status
     @request.service.uber_request_id = @response.request_id
     @request.service.save

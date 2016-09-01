@@ -70,9 +70,6 @@ class UberService
   end
 
   def ride_request
-    # if @request_id
-    #   @oauth_client.trip_cancel @request_id
-    # end
 
     response = @oauth_client.trip_request(
       product_id: @product_id,

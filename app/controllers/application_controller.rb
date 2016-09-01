@@ -6,4 +6,8 @@ class ApplicationController < ActionController::Base
   { host: ENV['HOST'] || 'localhost:3000' }
   end
 
+  #redirect to update after oauth uber
+  def after_sign_in_path_for(resource)
+    edit_user_path(resource)
+  end
 end

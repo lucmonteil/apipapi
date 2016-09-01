@@ -1,0 +1,9 @@
+<div class="wrapper padded">
+  <div class="container padded">
+    <%= form_for(@user) do |f| %>
+    <%= f.label :phone_number %>
+    <%= f.text_field :phone_number %>
+    <%= f.submit %>
+    <% end %>
+  </div>
+</div>
