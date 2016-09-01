@@ -39,6 +39,6 @@ class UberCallbacksController < ApplicationController
   end
 
   def create_message
-    Message.create(body: @response.status, user: @ride.user, sender: false)
+    Message.create(body: "Your Uber is #{@response.status}, #{@response.driver} is arriving in #{@response.eta} min !", user: @ride.user, sender: false)
   end
 end
