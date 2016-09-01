@@ -91,10 +91,6 @@ class MessagesController < ApplicationController
   end
 
   def create_message
-    if @view == "chat"
-      Message.create(body: "Test : " + @message_body, user: @user, sender: @sender)
-    else
-      Message.create(body: @message_body, user: @user, sender: @sender)
-    end
+    Message.create(body: @message_body, user: @user, sender: @sender)
   end
 end
