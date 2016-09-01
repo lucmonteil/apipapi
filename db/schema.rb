@@ -19,8 +19,10 @@ ActiveRecord::Schema.define(version: 20160831141500) do
     t.string   "query"
     t.float    "latitude"
     t.float    "longitude"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
+    t.integer  "start_address_id"
+    t.integer  "end_address_id"
   end
 
   create_table "messages", force: :cascade do |t|
@@ -44,12 +46,14 @@ ActiveRecord::Schema.define(version: 20160831141500) do
   end
 
   create_table "rides", force: :cascade do |t|
+    t.integer  "user_id"
     t.string   "status"
     t.datetime "created_at",       null: false
     t.datetime "updated_at",       null: false
     t.integer  "start_address_id"
     t.integer  "end_address_id"
     t.string   "uber_request_id"
+    t.index ["user_id"], name: "index_rides_on_user_id", using: :btree
   end
 
   create_table "users", force: :cascade do |t|
@@ -80,4 +84,5 @@ ActiveRecord::Schema.define(version: 20160831141500) do
 
   add_foreign_key "messages", "users"
   add_foreign_key "requests", "users"
+  add_foreign_key "rides", "users"
 end
