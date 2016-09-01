@@ -59,33 +59,38 @@ class RideConversation
 
     if location = @found_params.entities.detect {|entity| entity.name == "from"} || @ride.start_address
       if @ride.start_address.nil?
-        @ride.start_address = address if address = geocode(location.value)
-        @ride.save
+        address = geocode(location.value)
       else
         address = @ride.start_address
       end
 
-      @time_in_seconds = UberService.new(@ride).time_estimates
-      @time = @time_in_seconds / 60 if @time_in_seconds.class == Fixnum
-      @start_address_nice = geocode.first.formatted_address if geocode = Geocoder.search("#{address.latitude},#{address.longitude}")
+        @ride.start_address = address
+        @ride.save
+
+        @start_address_nice = Geocoder.search("#{address.latitude},#{address.longitude}").first.formatted_address
+
+        @time_in_seconds = UberService.new(@ride).time_estimates
+        @time = @time_in_seconds / 60 if @time_in_seconds.class == Fixnum
     end
 
     if location = @found_params.entities.detect {|entity| entity.name == "to"} || @ride.end_address
       if @ride.end_address.nil?
-        @ride.end_address = address if address = geocode(location.value)
-        @ride.save
+        address = geocode(location.value)
       else
         address = @ride.end_address
       end
-      @end_address_nice  = geocode.first.formatted_address if geocode = Geocoder.search("#{address.latitude},#{address.longitude}")
+
+      @ride.end_address = address
+      @ride.save
+
+      @end_address_nice = Geocoder.search("#{address.latitude},#{address.longitude}").first.formatted_address
     end
+    if  (location = @found_params.entities.detect {|entity| entity.name == "address"}) && (@ride.end_address || @ride.start_address)
 
-    if (found_location = @found_params.entities.detect {|entity| entity.name == "address"}) && (@ride.end_address || @ride.start_address)
+      address = geocode(location.value)
+      nice_address = Geocoder.search("#{address.latitude},#{address.longitude}").first.formatted_address
 
-      address = geocode(found_location.value) if geocode(found_location.value)
-      nice_address  = geocode.first.formatted_address if geocode = Geocoder.search("#{address.latitude},#{address.longitude}")
-
-      if @start.end_address
+      if @ride.end_address.nil?
         @ride.end_address = address
         @end_address_nice = nice_address
       else
@@ -96,7 +101,7 @@ class RideConversation
       @ride.save
     end
 
-    if @ride.end_address.nil? && @ride.start_address.nil?
+    if !@ride.end_address.nil? && !@ride.start_address.nil?
       @price = UberService.new(@ride).price_estimates
     end
   end
