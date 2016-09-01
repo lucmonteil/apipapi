@@ -14,6 +14,10 @@ class MessageParser
 
   def reply
 
+    error = "Je n'ai pas compris votre demande. Pour le moment " \
+            "nous proposons des courses UBER. Demandez une estimation en m'envoyant " \
+            "votre adresse de départ (avec la ville) et votre adresse d'arrivée."
+
     if @intention == "say-hi"
       sentences = @parsed_message.sentences
       if sentence = sentences.detect { |sentence| sentence.entities.detect {|entity| entity.name == "person" } }
@@ -64,10 +68,6 @@ class MessageParser
     else
       return error
     end
-
-    error = "Je n'ai pas compris votre demande. Pour le moment " \
-            "nous proposons des courses UBER. Demandez une estimation en m'envoyant " \
-            "votre adresse de départ (avec la ville) et votre adresse d'arrivée."
   end
 
   private
