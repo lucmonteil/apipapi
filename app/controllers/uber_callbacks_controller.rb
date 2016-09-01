@@ -22,6 +22,8 @@ class UberCallbacksController < ApplicationController
 
     create_message
 
+    reply
+
     head :ok
   end
 

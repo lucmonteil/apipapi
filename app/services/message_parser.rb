@@ -46,7 +46,7 @@ class MessageParser
           # il faut gérer les erreurs au cas ou il y a un pb lors de la commande
           if @response.status
             return "Merci#{@first_name ? ' ' + @first_name : ""}. Nous vous confirmons l'arrivée de votre "\
-                   "chauffeur dans les 3 minutes. (Your Uber request is #{@response.status}, the id is #{@response.request_id})"
+                   "chauffeur dans les 3 minutes. (Your Uber request is #{@response.status})"
           else
             return "Veuillez m'excuser#{@first_name ? ' ' + @first_name : ""}. Je n'ai pas réussi à vous trouver une voiture. " \
                    "Refaites une demande d'estimation en attendant 5 minutes et je ferai de mon mieux."
