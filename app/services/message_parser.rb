@@ -37,10 +37,11 @@ class MessageParser
       if @request.service
         if @request.service.start_address && @request.service.end_address
           @request.update(wait_message: false)
+          # APPEL DU UBER
           uber_request
           # il faut gérer les erreurs au cas ou il y a un pb lors de la commande
           if @response.status
-            return "Merci#{' '+@first_name}. Nous vous confirmons l'arrivée de votre chauffeur dans les 3 minutes."
+            return "Merci#{' '+@first_name}. Nous vous confirmons l'arrivée de votre chauffeur dans les 3 minutes. (Your Uber request is #{@response.status}, the id is #{@response.request_id})"
           else
             return "Veuillez m'excuser#{' '+@first_name}. Je n'ai pas réussi à vous trouver une voiture. " \
                    "Refaites une demande d'estimation en attendant 5 minutes et je ferai de mon mieux."
@@ -81,8 +82,15 @@ class MessageParser
 
   def uber_request
     api_uber_object = UberService.new(@request.service)
+
+    # Passe la commande de Uber et reçoit la réponse
     @response = api_uber_object.ride_request
-    # Commander puis stocker la request id du ride chez uber pour pouvoir suivre son status
+
+    # stocker la request id du ride chez uber pour pouvoir suivre son status
+    @request.service.uber_request_id = @response.request_id
+    @request.service.save
+
+    return @response
   end
 
   def set_request
