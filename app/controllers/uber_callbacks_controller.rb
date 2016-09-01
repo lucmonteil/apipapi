@@ -10,7 +10,7 @@ class UberCallbacksController < ApplicationController
 
     # si ya eu un changement de statut, on va vouloir envoyer un texto avec le nouveau statut
 
-    # on lance donc un get avec href_resource pour obtenir les infos de la ride
+    # On va aller chercher les nouveaux détails de la ride maintenant (sinon ==> on lance donc un get avec href_resource pour obtenir les infos de la ride)
     api_object = UberService.new(@ride)
     response = api_object.request_details
     p "==============DEBUG"
