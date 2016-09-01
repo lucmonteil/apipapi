@@ -5,7 +5,7 @@ class RideConversation
     @ride = @request.service
     @found_params = found_params
 
-    set_variables
+    check_addresses
   end
 
   def answer
@@ -42,9 +42,9 @@ class RideConversation
       else
         @answer = "Désolé, la zone autour de #{@start_address_nice} n'est pas encore couverte !"
       end
-    elsif @end_address
+    elsif @ride.end_address
       @answer = "Je n'ai pas compris votre adresse de départ. Pourriez-vous " \
-                "me la renvoyer ? "
+                "me la renvoyer en précisant la ville ? "
     else
       @answer = error
     end
@@ -55,59 +55,57 @@ class RideConversation
   private
 
   # TODO trouver les bonnes clefs entities (indice ce n'est pas :from et :to)
-  def set_variables
+  def check_addresses
 
-    if location_from = @found_params.entities.detect {|entity| entity.name == "from"} || @ride.start_address
+    if location = @found_params.entities.detect {|entity| entity.name == "from"} || @ride.start_address
       if @ride.start_address.nil?
-        geocode(location_from.value, "start") if location_from
-        @ride.start_address = @start_address
+        @ride.start_address = address if address = geocode(location.value)
         @ride.save
       else
-        @start_address = @ride.start_address
+        address = @ride.start_address
       end
 
-      @time = UberService.new(@ride).time_estimates
-      @time = @time / 60 if @time.class == Fixnum
-      @start_address_nice = Geocoder.search("#{@start_address.latitude},#{@start_address.longitude}")[0].formatted_address
+      @time_in_seconds = UberService.new(@ride).time_estimates
+      @time = @time_in_seconds / 60 if @time_in_seconds.class == Fixnum
+      @start_address_nice = geocode.first.formatted_address if geocode = Geocoder.search("#{address.latitude},#{address.longitude}")
     end
 
-    if location_to = @found_params.entities.detect {|entity| entity.name == "to"} || @ride.end_address
+    if location = @found_params.entities.detect {|entity| entity.name == "to"} || @ride.end_address
       if @ride.end_address.nil?
-        geocode(location_to.value, "end") if location_to
-        @ride.end_address = @end_address
+        @ride.end_address = address if address = geocode(location.value)
         @ride.save
       else
-        @end_address = @ride.end_address
+        address = @ride.end_address
       end
-      @end_address_nice = Geocoder.search("#{@end_address.latitude},#{@end_address.longitude}")[0].formatted_address
+      @end_address_nice  = geocode.first.formatted_address if geocode = Geocoder.search("#{address.latitude},#{address.longitude}")
     end
 
     if (found_location = @found_params.entities.detect {|entity| entity.name == "address"}) && (@ride.end_address || @ride.start_address)
 
-      geocode(found_location.value, "found")
-      nice_address = Geocoder.search("#{@found_address.latitude},#{@found_address.longitude}")[0].formatted_address
+      address = geocode(found_location.value) if geocode(found_location.value)
+      nice_address  = geocode.first.formatted_address if geocode = Geocoder.search("#{address.latitude},#{address.longitude}")
 
       if @start.end_address
-        @ride.end_address = @found_address
+        @ride.end_address = address
         @end_address_nice = nice_address
       else
-        @ride.start_address = @found_address
+        @ride.start_address = address
         @start_address_nice = nice_address
       end
 
       @ride.save
     end
 
-    unless @ride.end_address.nil? || @ride.start_address.nil?
+    if @ride.end_address.nil? && @ride.start_address.nil?
       @price = UberService.new(@ride).price_estimates
     end
   end
 
   # on utilise pas les lat et lng de Recast, ça fait trop de conditions
-  def geocode(searched_address, prefix)
+  def geocode(searched_address)
     address = Address.new(query: searched_address)
     address.validate # triggers geocoder
     address.save
-    instance_variable_set("@#{prefix}_address", address)
+    return address
   end
 end
