@@ -27,10 +27,18 @@
     function scrollToElement(ele) {
       setTimeout(function() {
         $('.chat-box-messages').scrollTop(ele.offset().top)
-      }, 100)
-      // document.getElementById('end').scrollIntoView();
+      }, 100);
     }
     scrollToElement($('#last'));
+
+    $(window).on('keydown', function(e){
+      if(e && e.keyCode == 13) {
+        if($('#message_body').val() != ""){
+          $('.simple_form').submit();
+        }
+      }
+    });
+
   });
   </script>
 <% end %>

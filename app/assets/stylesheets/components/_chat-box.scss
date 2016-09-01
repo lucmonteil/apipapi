@@ -60,18 +60,22 @@
  }
 
 .chat-box-input{
-  height: 100%;
 
   .form-input{
     display: initial;
     width: 78%;
-    padding: 0px 0px !important;
     font-size: 15px;
     border: none;
     border-bottom: 2px solid black;
+    height: 30px;
+    margin-top: 12px;
+    box-shadow: none;
+    padding-left: 0px;
+    color: black;
 
     &:focus{
       box-shadow: none;
+      font-weight: bolder;
     }
   }
 
