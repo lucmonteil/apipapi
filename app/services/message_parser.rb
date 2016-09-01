@@ -47,7 +47,7 @@ class MessageParser
           end
         end
       else
-        return "Je serai ravi de vous aider."\
+        return "Je serai ravi de vous aider. "\
                "Demandez une estimation de course en m'envoyant " \
                "votre adresse de départ (avec la ville) et votre adresse d'arrivée."
       end
@@ -93,8 +93,8 @@ class MessageParser
       @request = @user.requests.last
     end
 
-    # check si la dernière request est close ou si ça fait trop longtemps (600 secondes = 10 minutes)
-    if !@request.wait_message || ((Time.now) - @request.updated_at)  >= 600
+    # check si la dernière request est close ou si ça fait trop longtemps (300 secondes = 2.5 minutes)
+    if !@request.wait_message || ((Time.now) - @request.updated_at)  >= 150
       @request.update(wait_message: false)
       @request = create_request
     end
