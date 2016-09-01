@@ -83,15 +83,18 @@ class RideConversation
     end
 
     if (found_location = @found_params.entities.detect {|entity| entity.name == "address"}) && (@ride.end_address || @ride.start_address)
-      geocode(found_location.value, "found") if found_location
-      unless @ride.end_address
+
+      geocode(found_location.value, "found")
+      nice_address = Geocoder.search("#{@found_address.latitude},#{@found_address.longitude}")[0].formatted_address
+
+      if @start.end_address
         @ride.end_address = @found_address
-        @end_address_nice = Geocoder.search("#{@end_address.latitude},#{@end_address.longitude}")[0].formatted_address
-      end
-      unless @ride.start_address
+        @end_address_nice = nice_address
+      else
         @ride.start_address = @found_address
-        @start_address_nice = Geocoder.search("#{@start_address.latitude},#{@start_address.longitude}")[0].formatted_address
+        @start_address_nice = nice_address
       end
+
       @ride.save
     end
 
