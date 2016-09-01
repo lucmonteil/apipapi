@@ -1,0 +1,18 @@
+<div class="wrapper-blue" style="margin: 0px;">
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+
+  <div class="text">
+    <p>Entrez votre numéro de teléphone pour recevoir l'accès immédiat à notre service !</p>
+  </div>
+  <div class="container text-center">
+    <%= form_for(@user) do |f| %>
+    <%= f.label :phone_number %>
+    <%= f.text_field :phone_number %>
+    <%= f.submit %>
+    <% end %>
+  </div>
+</div>
