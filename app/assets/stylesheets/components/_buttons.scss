@@ -5,11 +5,30 @@
   padding-bottom: 0px;
   -webkit-transition: all 0.1s ease;
   transition: all 0.1s ease;
+  border-bottom: 5px solid white;
     &:hover {
       color: white;
     }
 }
 
+.btn-underline-yellow {
+  color: white;
+  border-bottom: 2px solid white;
+  text-decoration: none !important;
+  height: 39px;
+  transition: all 0.1s ease;
+  &:hover {
+    color: white;
+    border-bottom: 4px solid $yellow;
+  }
+  &:active {
+    box-shadow:  none;
+    border-bottom-color: white;
+  }
+  &:visited {
+    color: white;
+  }
+}
 
 .btn-treehouse-blue {
   color: white;
