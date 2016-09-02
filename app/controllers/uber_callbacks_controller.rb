@@ -60,6 +60,7 @@ class UberCallbacksController < ApplicationController
         Message.create(body: "Votre commande Uber est #{@response.status}, #{@response.driver} arrivera dans #{@response.eta} minutes. Soyez prêt!")
       elsif @response.status == "rider_canceled"
         Message.create(body: "Nous vous confirmons l'annulation de votre Uber. A très vite sur Happy papi ;)")
+      end
     else
       p "=================IL EST PROCESSING DONC PAS DE TEXTO ================================="
     end
