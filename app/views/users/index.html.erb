@@ -26,6 +26,11 @@
               <div class="no-decoration"><p><span class="label label-default"><%= user.messages.count.to_s + " messages (#{user.messages.where(sender: true).count.to_s} envoyés, #{user.messages.where(sender: false).count.to_s} reçus)" %></span></p></div>
             </li>
           <% end %>
+          <%= link_to interface_path(user) do %>
+            <li class="list-group-item flex">
+              <p>User chat</p>
+            </li>
+          <% end %>
         </ul>
       </li>
     <% end %>
