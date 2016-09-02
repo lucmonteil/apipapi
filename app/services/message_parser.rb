@@ -123,7 +123,7 @@ class MessageParser
         @ride.start_address = to
 
         @ride.save
-        return ride_conversation
+        return "C'est réparé. " + ride_conversation
       elsif @ride.start_address
 
         adress = @ride.start_address
@@ -131,15 +131,15 @@ class MessageParser
         @ride.start_address = nil
 
         @ride.save
-        return ride_conversation
-      elsif @ride.end_address
+        return "Ça devrait être bon maintenant : " + ride_conversation
+      elsif @ride.start_address
 
         adress = @ride.end_address
         @ride.start_address = adress
         @ride.end_address = nil
 
         @ride.save
-        return ride_conversation
+        return "Ok. " + @ride.start_address
       else
         return "Refaites une estimation de course avec vos adresses précises de départ et d'arrivée"
       end
