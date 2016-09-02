@@ -57,10 +57,10 @@ class RideConversation
   def check_addresses
 
     if location = @found_params.entities.detect {|entity| entity.name == "from"} || @ride.start_address
-      if @ride.start_address.nil?
-        address = geocode(location.value)
-      else
+      if @ride.start_address
         address = @ride.start_address
+      else
+        address = geocode(location.value)
       end
 
         @ride.start_address = address
@@ -69,15 +69,17 @@ class RideConversation
         geo = Geocoder.search("#{address.latitude},#{address.longitude}").first.address_components
         @start_address_nice = geo.first["short_name"] + ", " + geo.second["short_name"] + " à " + geo.third["short_name"]
 
-        @time_in_seconds = UberService.new(@ride).time_estimates
-        @time = @time_in_seconds / 60 if @time_in_seconds.class == Fixnum
+
+        @time = UberService.new(@ride).time_estimates
+        @time = @time / 60 if @time.class == Fixnum
+
     end
 
     if location = @found_params.entities.detect {|entity| entity.name == "to"} || @ride.end_address
-      if @ride.end_address.nil?
-        address = geocode(location.value)
-      else
+      if @ride.end_address
         address = @ride.end_address
+      else
+        address = geocode(location.value)
       end
 
       @ride.end_address = address
@@ -95,11 +97,11 @@ class RideConversation
       nice_address = geo.first["short_name"] + ", " + geo.second["short_name"] + " à " + geo.third["short_name"]
 
 
-      if @ride.end_address.nil?
+      if @ride.start_address
         @ride.end_address = address
         @end_address_nice = nice_address
       else
-        @ride.start_address = address
+        @ride.end_address = address
         @start_address_nice = nice_address
       end
 
@@ -113,9 +115,42 @@ class RideConversation
 
   # on utilise pas les lat et lng de Recast, ça fait trop de conditions
   def geocode(searched_address)
-    address = Address.new(query: searched_address)
-    address.validate # triggers geocoder
-    address.save
-    return address
+    if @ride.start_address || @ride.end_address
+      p_address = @ride.start_address if @ride.start_address
+      p_address = @ride.end_address if @ride.end_address
+
+      p_lat = p_address.latitude
+      p_lng = p_address.longitude
+
+      found_addresses = Geocoder.search(searched_address)
+
+      distances = []
+
+      found_addresses.each do |address|
+
+        lat = address.geometry["location"]["lat"]
+        lng = address.geometry["location"]["lng"]
+
+        distance = Geocoder::Calculations.distance_between("#{p_lat},#{p_lng}", "#{lat},#{lng}")
+
+        item = [address, distance]
+
+        distances << item
+      end
+
+      distances.sort_by! { |address| address[1] }
+
+      closest_address_raw_name = distances.first.first.formatted_address
+
+      address = Address.new(query: closest_address_raw_name)
+      address.validate # triggers geocoder
+      address.save
+      return address
+    else
+      address = Address.new(query: searched_address)
+      address.validate # triggers geocoder
+      address.save
+      return address
+    end
   end
 end
