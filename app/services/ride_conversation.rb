@@ -67,7 +67,7 @@ class RideConversation
         @ride.save
 
         geo = Geocoder.search("#{address.latitude},#{address.longitude}").first.address_components
-        @start_address_nice = geo.first["short_name"] + ", " + geo.second["short_name"] + " à " + geo.third["short_name"]
+        @start_address_nice = geo.first["short_name"] + " " + geo.second["short_name"] + " à " + geo.third["short_name"]
 
 
         @time = UberService.new(@ride).time_estimates
@@ -86,7 +86,7 @@ class RideConversation
       @ride.save
 
       geo = Geocoder.search("#{address.latitude},#{address.longitude}").first.address_components
-      @end_address_nice = geo.first["short_name"] + ", " + geo.second["short_name"] + " à " + geo.third["short_name"]
+      @end_address_nice = geo.first["short_name"] + " " + geo.second["short_name"] + " à " + geo.third["short_name"]
 
     end
 
@@ -94,7 +94,7 @@ class RideConversation
 
       address = geocode(location.value)
       geo = Geocoder.search("#{address.latitude},#{address.longitude}").first.address_components
-      nice_address = geo.first["short_name"] + ", " + geo.second["short_name"] + " à " + geo.third["short_name"]
+      nice_address = geo.first["short_name"] + " " + geo.second["short_name"] + " à " + geo.third["short_name"]
 
 
       if @ride.start_address
@@ -114,7 +114,11 @@ class RideConversation
   end
 
   # on utilise pas les lat et lng de Recast, ça fait trop de conditions
-  def geocode(searched_address)
+  def geocode(search)
+
+    geo = Geocoder.search(search + ", France").first.address_components
+    searched_address = geo.first["short_name"] + " " + geo.second["short_name"] + " " + geo.third["short_name"]
+
     if @ride.start_address || @ride.end_address
       p_address = @ride.start_address if @ride.start_address
       p_address = @ride.end_address if @ride.end_address
