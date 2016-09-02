@@ -43,12 +43,15 @@ class MessageParser
       if (@ride = @request.service) && @ride.start_address && @ride.end_address
         @request.update(wait_message: false)
         if @request.user.uber_token
+
           # APPEL DU UBER
           uber_request
           # il faut gérer les erreurs au cas ou il y a un pb lors de la commande
-          if @response.status
+          if @response == "Surge pricing"
+            return "Veuillez m'excuser#{@first_name ? ' ' + @first_name : ""}, la majoration tarifaire du service Uber est trop élevée en ce moment, veuillez réessayer dans quelques minutes. Merci"
+          elsif @response.status
             return "Merci#{@first_name ? ' ' + @first_name : ""}. Nous vous confirmons l'arrivée de votre "\
-                   "chauffeur dans les 3 minutes. (Your Uber request is #{@response.status})"
+                   "chauffeur dans les 3 minutes."
           else
             return "Veuillez m'excuser#{@first_name ? ' ' + @first_name : ""}. Je n'ai pas réussi à vous trouver une voiture. " \
                    "Refaites une demande d'estimation en attendant 5 minutes et je ferai de mon mieux"
@@ -92,9 +95,12 @@ class MessageParser
     @response = api_uber_object.ride_request
 
     p @response
-    # stocker la request id du ride chez uber pour pouvoir suivre son status
-    @request.service.uber_request_id = @response.request_id
-    @request.service.save
+
+    unless @response == "Surge pricing"
+      # stocker la request id du ride chez uber pour pouvoir suivre son status
+      @request.service.uber_request_id = @response.request_id
+      @request.service.save
+    end
 
     return @response
   end

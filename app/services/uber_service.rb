@@ -13,7 +13,7 @@ class UberService
 
     #tokens d'environnement
     oauth_params = {
-      sandbox: true,
+      sandbox: false,
       server_token: ENV["UBER_SERVER_TOKEN"],
       client_id: ENV["UBER_CLIENT_ID"],
       client_secret: ENV["UBER_CLIENT_SECRET"],
@@ -23,7 +23,7 @@ class UberService
     @oauth_client = Uber::Client.new(oauth_params)
 
     params = {
-      sandbox: true,
+      sandbox: false,
       server_token: ENV["UBER_SERVER_TOKEN"],
       client_id: ENV["UBER_CLIENT_ID"],
       client_secret: ENV["UBER_CLIENT_SECRET"],
@@ -71,13 +71,17 @@ class UberService
 
   def ride_request
 
-    response = @oauth_client.trip_request(
-      product_id: @product_id,
-      start_latitude: @ride.start_address.latitude,
-      start_longitude: @ride.start_address.longitude,
-      end_latitude: @ride.end_address.latitude,
-      end_longitude: @ride.end_address.longitude
-    )
+    begin
+      response = @oauth_client.trip_request(
+        product_id: @product_id,
+        start_latitude: @ride.start_address.latitude,
+        start_longitude: @ride.start_address.longitude,
+        end_latitude: @ride.end_address.latitude,
+        end_longitude: @ride.end_address.longitude
+      )
+    rescue Uber::Error::BadRequest => error
+      return "Surge pricing"
+    end
   end
 
   def request_details
