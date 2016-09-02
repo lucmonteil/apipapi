@@ -30,9 +30,8 @@ class RideConversation
       else
         @answer = "Le prix de la course de #{@start_address_nice } " \
                   "à #{@end_address_nice} est de #{@price} (une voiture peut être là " \
-                  "dans #{@time} minutes). Appellez-nous pour créer un compte Uber et commander " \
-                  "des chauffeurs partout en Europe."
-        @request.update(wait_message: false)
+                  "dans #{@time} minutes). Voulez-vous que nous vous appellions maintenant pour vous créer " \
+                  "un compte et commander des chauffeurs partout en Europe ?"
       end
     elsif @time
       if @time.class == Fixnum

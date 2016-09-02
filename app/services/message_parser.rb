@@ -16,7 +16,7 @@ class MessageParser
 
     error = "Je n'ai pas compris votre demande. Pour le moment " \
         "nous proposons des courses UBER. Demandez une estimation en m'envoyant " \
-        "votre adresse de départ (avec la ville) et votre adresse d'arrivée."
+        "votre adresse de départ (avec la ville) et votre adresse d'arrivée"
 
     if @intention == "say-hi"
       sentences = @parsed_message.sentences
@@ -27,20 +27,22 @@ class MessageParser
         @user.save
         return "Bonjour #{@first_name}! " \
                "Nous proposons des courses UBER. Demandez une estimation en m'envoyant " \
-               "votre adresse de départ (avec la ville) et votre adresse d'arrivée."
+               "votre adresse de départ (avec la ville) et votre adresse d'arrivée"
       end
       return "Bonjour je suis votre assistant Uber ! " \
              "Demandez une estimation de course en m'envoyant " \
-             "votre adresse de départ (avec la ville) et votre adresse d'arrivée."
+             "votre adresse de départ (avec la ville) et votre adresse d'arrivée"
+    elsif @intention == "reverse-address"
+      return reverse_addresses
     elsif @intention == "get-a-cab" || @intention == "complementary-address"
-      return ride
+      return ride_conversation
     elsif @intention == "information"
       return "Nous proposons des courses UBER. Demandez une estimation en m'envoyant " \
-             "votre adresse de départ (avec la ville) et votre adresse d'arrivée."
+             "votre adresse de départ (avec la ville) et votre adresse d'arrivée"
     elsif @intention == "accept"
-      if @request.service
-        if @request.service.start_address && @request.service.end_address
-          @request.update(wait_message: false)
+      if (@ride = @request.service) && @ride.start_address && @ride.end_address
+        @request.update(wait_message: false)
+        if @request.user.uber_token
           # APPEL DU UBER
           uber_request
           # il faut gérer les erreurs au cas ou il y a un pb lors de la commande
@@ -49,13 +51,15 @@ class MessageParser
                    "chauffeur dans les 3 minutes. (Your Uber request is #{@response.status})"
           else
             return "Veuillez m'excuser#{@first_name ? ' ' + @first_name : ""}. Je n'ai pas réussi à vous trouver une voiture. " \
-                   "Refaites une demande d'estimation en attendant 5 minutes et je ferai de mon mieux."
+                   "Refaites une demande d'estimation en attendant 5 minutes et je ferai de mon mieux"
           end
+        else
+          return "Dring, Dring"
         end
       else
         return "Je serai ravi de vous aider. "\
                "Demandez une estimation de course en m'envoyant " \
-               "votre adresse de départ (avec la ville) et votre adresse d'arrivée."
+               "votre adresse de départ (avec la ville) et votre adresse d'arrivée"
       end
     elsif @intention == "cancel"
       if @request.service
@@ -63,9 +67,9 @@ class MessageParser
         return "Votre commande a été annulée. Renvoyer une demande d'estimation quand vous "\
                "voulez : je reste à votre service"
       else
-        return "Il n'y a pas de demande en cours. Je me suis peut-etre emmelé les pinceaux."\
+        return "Il n'y a pas de demande en cours. Je me suis peut-etre emmelé les pinceaux "\
                "nous proposons des courses UBER. Demandez une estimation en m'envoyant " \
-               "votre adresse de départ (avec la ville) et votre adresse d'arrivée."
+               "votre adresse de départ (avec la ville) et votre adresse d'arrivée"
       end
     else
       return error
@@ -75,7 +79,7 @@ class MessageParser
   private
 
   # liste des services
-  def ride
+  def ride_conversation
     @request.service = Ride.create(status: "pending") unless @request.service
     @request.save
     @answer = RideConversation.new(@request, @parsed_message).answer
@@ -110,6 +114,41 @@ class MessageParser
     if !@request.wait_message || ((Time.now) - @request.updated_at)  >= 150
       @request.update(wait_message: false)
       @request = create_request
+    end
+  end
+
+  def reverse_addresses
+    if @ride = @user.requests.last.service
+      if @ride.start_address && @ride.end_address
+
+        from = @ride.start_address
+        to = @ride.end_address
+        @ride.end_address = from
+        @ride.start_address = to
+
+        @ride.save
+        return "C'est réparé. " + ride_conversation
+      elsif @ride.start_address
+
+        adress = @ride.start_address
+        @ride.end_address = adress
+        @ride.start_address = nil
+
+        @ride.save
+        return "Ça devrait être bon maintenant : " + ride_conversation
+      elsif @ride.start_address
+
+        adress = @ride.end_address
+        @ride.start_address = adress
+        @ride.end_address = nil
+
+        @ride.save
+        return "Ok. " + @ride.start_address
+      else
+        return "Refaites une estimation de course avec vos adresses précises de départ et d'arrivée"
+      end
+    else
+      return "Refaites une estimation de course avec vos adresses précises de départ et d'arrivée"
     end
   end
 
