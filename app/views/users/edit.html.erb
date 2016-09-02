@@ -1,18 +1,14 @@
-<div class="wrapper-blue" style="margin: 0px;">
-  <br>
-  <br>
-  <br>
-  <br>
-  <br>
-
-  <div class="text">
+<div class="wrapper-blue" id="phone-form" style="margin: 0px;">
+  <div class="text padded">
     <p>Entrez votre numéro de teléphone pour recevoir l'accès immédiat à notre service !</p>
   </div>
-  <div class="container text-center">
-    <%= form_for(@user) do |f| %>
-    <%= f.label :phone_number %>
-    <%= f.text_field :phone_number %>
-    <%= f.submit %>
+  <div class="container col-xs-6 col-xs-offset-3 form-inline">
+    <%= simple_form_for(@user) do |f| %>
+    <%= f.input :phone_number, label: false, required: true, autofocus: true %>
+    <%= f.button :submit, "Go", class: "btn btn-danger" %>
     <% end %>
+  </div>
+  <div class="padded">
+    <p> </p>
   </div>
 </div>
