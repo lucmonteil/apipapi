@@ -29,16 +29,21 @@ class UberCallbacksController < ApplicationController
     # envoie du message avec Twilio
     if @response.status != "processing"
       if @response.status == "accepted"
-        @message_body = "Votre commande Uber est confirmée, #{@response.driver.name} arrivera dans #{@response.eta} minutes dans une #{@response.vehicle.make}. Soyez prêt!"
+        @message_body = "#{@response.driver.name} arrive dans #{@response.eta} minutes dans une #{@response.vehicle.make}"
+        unless @message_body == @ride.user.messages.last.body
+          create_message
+          reply
+        end
       elsif @response.status == "rider_canceled"
-        @message_body = "Nous vous confirmons l'annulation de votre Uber. A très vite sur Happy papi ;)"
-      end
-      unless @message_body == @ride.user.messages.last.body
-        create_message
-        reply
+        sleep 1
+        unless @message_body == @ride.user.messages.last.body
+          create_message
+          reply
+        end
+        @message_body = "Votre Uber est annulé. Merci de votre confiance"
       end
     else
-      p "=================IL EST PROCESSING DONC PAS DE TEXTO ================================="
+      p "================================= IL EST PROCESSING DONC PAS DE TEXTO ================================="
     end
   end
 
