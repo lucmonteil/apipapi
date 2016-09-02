@@ -35,11 +35,11 @@ class UberCallbacksController < ApplicationController
           reply
         end
       elsif @response.status == "rider_canceled"
+        @message_body = "Votre Uber est annulé. Merci de votre confiance"
         unless @message_body == @ride.user.messages.last.body
           create_message
           reply
         end
-        @message_body = "Votre Uber est annulé. Merci de votre confiance"
       end
     else
       p "================================= IL EST PROCESSING DONC PAS DE TEXTO ================================="
