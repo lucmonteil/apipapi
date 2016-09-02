@@ -35,7 +35,6 @@ class UberCallbacksController < ApplicationController
           reply
         end
       elsif @response.status == "rider_canceled"
-        sleep 1
         unless @message_body == @ride.user.messages.last.body
           create_message
           reply
