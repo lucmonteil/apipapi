@@ -48,7 +48,7 @@ class UberService
         )
       car = estimation.detect {|e| e.display_name == "uberX"}
       if car
-        car[:estimate]
+        return car[:high_estimate].to_s + " euros"
       else
         return "no_uber"
       end
