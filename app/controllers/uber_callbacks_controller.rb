@@ -31,16 +31,37 @@ class UberCallbacksController < ApplicationController
 
   def reply
     # envoit du message avec Twilio
-    client = Twilio::REST::Client.new ENV['TWILIO_SID'], ENV['TWILIO_TOKEN']
-    apipapi_phone_number = ENV['TWILIO_NUMBER']
-    sms = client.messages.create(
-            from: apipapi_phone_number,
-            to: @phone_number,
-            body: "Your Uber is #{@response.status}, #{@response.driver} is arriving in #{@response.eta} min !"
-          )
+    if @response.status != "processing"
+      if @response.status == "accepted"
+        client = Twilio::REST::Client.new ENV['TWILIO_SID'], ENV['TWILIO_TOKEN']
+        apipapi_phone_number = ENV['TWILIO_NUMBER']
+        sms = client.messages.create(
+              from: apipapi_phone_number,
+              to: @phone_number,
+              body: "Votre commande Uber est #{@response.status}, #{@response.driver} arrivera dans #{@response.eta} minutes. Soyez prêt!"
+            )
+      elsif @response.status == "rider_canceled"
+        client = Twilio::REST::Client.new ENV['TWILIO_SID'], ENV['TWILIO_TOKEN']
+        apipapi_phone_number = ENV['TWILIO_NUMBER']
+        sms = client.messages.create(
+              from: apipapi_phone_number,
+              to: @phone_number,
+              body: "Nous vous confirmons l'annulation de votre Uber. A très vite sur Happy papi ;)"
+            )
+      end
+    else
+      p "=================IL EST PROCESSING DONC PAS DE TEXTO ================================="
+    end
   end
 
   def create_message
-    Message.create(body: "Your Uber is #{@response.status}, #{@response.driver} is arriving in #{@response.eta} min !", user: @ride.user, sender: false)
+    if @response.status != "processing"
+      if @response.status == "accepted"
+        Message.create(body: "Votre commande Uber est #{@response.status}, #{@response.driver} arrivera dans #{@response.eta} minutes. Soyez prêt!")
+      elsif @response.status == "rider_canceled"
+        Message.create(body: "Nous vous confirmons l'annulation de votre Uber. A très vite sur Happy papi ;)")
+    else
+      p "=================IL EST PROCESSING DONC PAS DE TEXTO ================================="
+    end
   end
 end
